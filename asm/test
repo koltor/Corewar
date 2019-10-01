@@ -1,0 +1,9 @@
+echo "file path ?"
+read file_path
+echo "file name ? (whithout extension)"
+read file_name
+./my_asm $file_path$file_name.s
+mv $file_path$file_name.cor my_cor
+../ressources/asm $file_path$file_name.s
+mv $file_path$file_name.cor orig_cor
+diff my_cor orig_cor > diff.txt
