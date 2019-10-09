@@ -6,7 +6,7 @@
 #    By: kgrosjea <kgrosjea@student.le-101.fr>      +:+   +:    +:    +:+      #
 #                                                  #+#   #+    #+    #+#       #
 #    Created: 2018/10/17 11:23:06 by kgrosjea     #+#   ##    ##    #+#        #
-#    Updated: 2019/09/30 13:22:33 by kgrosjea    ###    #+. /#+    ###.fr      #
+#    Updated: 2019/10/08 17:35:56 by kgrosjea    ###    #+. /#+    ###.fr      #
 #                                                          /                   #
 #                                                         /                    #
 # **************************************************************************** #
@@ -29,6 +29,16 @@ INC			=	./includes/			\
 				./libft/			\
 
 SRC			=	main.c				\
+				command_list.c		\
+				parse_and_cut.c		\
+				parsing.c			\
+				compute_and_check.c	\
+				op_infos.c			\
+				new_struct.c		\
+				op.c				\
+				utils.c				\
+				str_multisplit.c	\
+				debug.c
 
 BIN			=	$(SRC:.c=.o)
 

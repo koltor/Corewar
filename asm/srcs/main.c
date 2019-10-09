@@ -3,55 +3,56 @@
 /*                                                              /             */
 /*   main.c                                           .::    .:/ .      .::   */
 /*                                                 +:+:+   +:    +:  +:+:+    */
-/*   By: kgrosjea <kev.grosjean@gmail.com>          +:+   +:    +:    +:+     */
+/*   By: kgrosjea <kgrosjea@student.le-101.fr>      +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/09/30 13:06:57 by kgrosjea     #+#   ##    ##    #+#       */
-/*   Updated: 2019/10/01 10:58:51 by kgrosjea    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/10/08 18:14:03 by kgrosjea    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
 #include "asm.h"
 
-// void    parse_file(int fd, t_bool option)
-// {
-
-// }
-
-int check_format(int ac, char **av, char **file, t_bool *option)
+void	check_format(int ac, char **av, t_data **data)
 {
-    if (ac == 1)
-    {
-        printf(USAGE);
-        return (0);
-    }
-    int i = 1;
-    while (i < ac)
-    {
-        if (!strcmp(av[i], "-a"))
-            *option = TRUE;
-        else
-            *file = av[i];
-        i++;
-    }
-    return (1);
+	int i;
+
+	if (ac == 1)
+		error_exit(USAGE);
+	i = 1;
+	while (i < ac)
+	{
+		if (!strcmp(av[i], "-a"))
+			(*data)->annote = TRUE;
+		else if (!((*data)->file_name = strdup(av[i])))
+			error_exit("Malloc error !");
+		i++;
+	}
 }
 
-int main(int ac, char **av)
-{  
-    char *file = NULL;
-    t_bool option = FALSE;
-    int fd = 0;
-    if (!check_format(ac, av, &file, &option))
-        exit(1);
-    if ((fd = open(file, O_RDONLY)) != -1)
-    {
-        printf("fd = %d\n", fd);
-        // parse_file(fd, option);
-    }
-    else
-    {
-        printf("%s : %s\n", strerror(errno), file);
-    }
-    
-    exit(0);
+// void	generate_cor_file(t_champ *champ)
+// {
+// 	char *memory;
+
+// 	memory = NULL;
+// 	if (!(memory = (char *)malloc(PROG_NAME_LENGTH + COMMENT_LENGTH + 4 + champ->program_size)))
+// 		error_exit("malloc error !");
+// }
+
+int		main(int ac, char **av)
+{
+	t_data	*data;
+
+	data = NULL;
+	if (!(data = new_data()))
+		error_exit ("Malloc error !");
+	check_format(ac, av, &data);
+	if ((data->fd = open(data->file_name, O_RDONLY)) == -1)
+		error_exit (strerror(errno));
+	if (!(data->champ = new_champ()))
+		error_exit ("Malloc error !");
+	parse_file(data->fd, &(data->champ));
+	compute_and_check(&(data->champ));
+	// generate_cor_file(data->champ);
+	debug(data->champ);
+	exit(0);
 }

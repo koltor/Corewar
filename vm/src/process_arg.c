@@ -6,7 +6,7 @@
 /*   By: matheme <matheme@student.le-101.fr>        +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/09/30 07:52:33 by matheme      #+#   ##    ##    #+#       */
-/*   Updated: 2019/09/30 12:47:27 by matheme     ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/10/09 10:16:51 by matheme     ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -23,7 +23,7 @@ static int	close_file(int nbfile, int files[MAX_PLAYERS])
 	int i;
 
 	i = -1;
-	while (++i < nbfile)
+	while (++i < nbfile && i < MAX_PLAYERS)
 	{
 		if (files[i] != -1)
 			close(files[i]);
@@ -36,20 +36,20 @@ static int	close_file(int nbfile, int files[MAX_PLAYERS])
 ** lors du parsing.
 */
 
-static int	check_error_arg(t_option arg_data)
+static int	check_error_arg(t_option arg_da)
 {
 	int i;
 
 	i = -1;
-	if (arg_data.dump == -1 || arg_data.option == -1 || arg_data.expected_arg != 0)
-		return (close_file(arg_data.nb_champ, arg_data.fd));
-	if (arg_data.nb_champ > MAX_PLAYERS)
-		return (close_file(arg_data.nb_champ, arg_data.fd));
-	while (++i < arg_data.nb_champ)
-		if (arg_data.fd[i] == -1 || arg_data.n[i] == -1)
-			return (close_file(arg_data.nb_champ, arg_data.fd));
+	if (arg_da.dump == -2 || arg_da.expected_arg != 0 || arg_da.verbose == -2)
+		return (close_file(arg_da.nb_champ, arg_da.fd));
+	if (arg_da.nb_champ > MAX_PLAYERS)
+		return (close_file(arg_da.nb_champ, arg_da.fd));
+	while (++i < arg_da.nb_champ)
+		if (arg_da.fd[i] == -1 || arg_da.n[i] == -2)
+			return (close_file(arg_da.nb_champ, arg_da.fd));
 	if (i == 0)
-		return (close_file(arg_data.nb_champ, arg_data.fd));
+		return (close_file(arg_da.nb_champ, arg_da.fd));
 	return (1);
 }
 
@@ -65,19 +65,28 @@ static int	check_error_arg(t_option arg_data)
 
 static char	get_instruct_code(char expected_arg, char *str)
 {
+	if (expected_arg == -1)
+		return (INSTRUCT_CODE_ERROR);
 	if (expected_arg == 0)
 	{
 		if (str[0] == '-')
 			return (RECUPERE_OPTIONS);
 		return (OUVRE_UN_FICHIER);
 	}
-	if (expected_arg == 1 || expected_arg == 2)
+	if (expected_arg == 1 || expected_arg == 2 || expected_arg == 3)
+	{
+		if ((*str < '0' || *str > '9') && *str != '+' && *str != '-')
+			return (INSTRUCT_CODE_ERROR);
 		return (RECUPERE_VALEURS);
+	}
 	return (OUVRE_UN_FICHIER);
 }
 
 /*
-** treat_arg reçois un code d'instruction et execute la fonction associer
+** process_arg_cycle traite les arguments 1 par 1 jusqu'au dernier
+** et remplies la base de donnée des arguments
+** la fonction genere egalement un code d'instruction et execute
+** la fonction associer
 ** en lui transmettant les arguments attendu par la fonction
 ** code d'instruction 0: ouvrir un fichier champion
 ** code d'instruction 1: recuperer un ou des options;
@@ -85,29 +94,20 @@ static char	get_instruct_code(char expected_arg, char *str)
 **          (execute un atol et verifie les overflows pour int)
 */
 
-static void	treat_arg(char n, char *str, t_option *arg_data)
+static void	process_arg_cycle(t_option *arg_data, int ac, char **av)
 {
+	char		instruct_code;
 	static void	(*p[3])(char*, t_option*) = {
 		&get_champ, &get_option, &get_value_for
 	};
-
-	p[n](str, arg_data);
-}
-
-/*
-** process_arg_cycle traite les arguments 1 par 1 jusqu'au dernier
-** et remplies la base de donnée des arguments
-*/
-
-static void	process_arg_cycle(t_option *arg_data, int ac, char **av)
-{
-	char instruct_code;
 
 	instruct_code = 0;
 	if (ac == 0)
 		return ;
 	instruct_code = get_instruct_code(arg_data->expected_arg, av[0]);
-	treat_arg(instruct_code, av[0], arg_data);
+	if (instruct_code == INSTRUCT_CODE_ERROR)
+		return ;
+	p[instruct_code](av[0], arg_data);
 	process_arg_cycle(arg_data, ac - 1, &av[1]);
 }
 
@@ -120,6 +120,13 @@ static void	process_arg_cycle(t_option *arg_data, int ac, char **av)
 
 void		process_arg(t_option *arg_data, int ac, char **av)
 {
+	int i;
+
+	i = 0;
+	arg_data->dump = -1;
+	arg_data->verbose = -1;
+	while (i < MAX_PLAYERS)
+		arg_data->n[i++] = -1;
 	process_arg_cycle(arg_data, ac, av);
 	if (!check_error_arg(*arg_data))
 		usage();

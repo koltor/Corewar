@@ -3,16 +3,16 @@
 /*                                                              /             */
 /*   op.c                                             .::    .:/ .      .::   */
 /*                                                 +:+:+   +:    +:  +:+:+    */
-/*   By: kgrosjea <kev.grosjean@gmail.com>          +:+   +:    +:    +:+     */
+/*   By: kgrosjea <kgrosjea@student.le-101.fr>      +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/10/01 10:42:36 by kgrosjea     #+#   ##    ##    #+#       */
-/*   Updated: 2019/10/01 10:44:00 by kgrosjea    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/10/08 15:44:28 by kgrosjea    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
-#include "op.h"
+#include "asm.h"
 
-t_op    op_tab[17] =
+t_op	op_tab[17] =
 {
 	{"live", 1, {T_DIR}, 1, 10, "alive", 0, 0},
 	{"ld", 2, {T_DIR | T_IND, T_REG}, 2, 5, "load", 1, 0},

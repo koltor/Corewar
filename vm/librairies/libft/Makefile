@@ -6,7 +6,7 @@
 #    By: matheme <matheme@student.le-101.fr>        +:+   +:    +:    +:+      #
 #                                                  #+#   #+    #+    #+#       #
 #    Created: 2018/10/03 11:06:26 by yalabidi     #+#   ##    ##    #+#        #
-#    Updated: 2019/10/01 13:47:57 by matheme     ###    #+. /#+    ###.fr      #
+#    Updated: 2019/10/09 14:45:11 by matheme     ###    #+. /#+    ###.fr      #
 #                                                          /                   #
 #                                                         /                    #
 # **************************************************************************** #
@@ -77,12 +77,18 @@ OBJ= 	ft_memcpy.o\
 		get_next_line.o\
 		ft_lstadd.o\
 		ft_lstnew.o\
+		ft_hexdump.o\
+		ft_lstdelone.o\
+		ft_lstdel.o \
+		ft_unsigned_int_reverse_octet.o \
+		ft_short_reverse_octet.o
+
 
 CC=-Wall -Werror -Wextra
 
 all : $(NAME)
 
-$(NAME) : $(OBJ)
+$(NAME) : $(OBJ) $(HEADER)
 	@echo "\t\033[32m\033[0m"
 	@echo "\033[35m\n(✌ﾟ∀ﾟ)☞  libft Compiler\n\033[0m"
 

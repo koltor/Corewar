@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                          LE - /            */
 /*                                                              /             */
-/*   ft_pointhexa.c                                   .::    .:/ .      .::   */
+/*   ft_putadresse.c                                  .::    .:/ .      .::   */
 /*                                                 +:+:+   +:    +:  +:+:+    */
-/*   By: matheme <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
+/*   By: matheme <matheme@student.le-101.fr>        +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/10/11 09:51:40 by matheme      #+#   ##    ##    #+#       */
-/*   Updated: 2018/10/11 17:17:23 by matheme     ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/10/03 09:53:02 by matheme     ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -15,14 +15,11 @@
 
 static	void	ft_putadresse2(unsigned long long adr)
 {
-	char *base;
+	const char base[] = "0123456789abcdef\0";
 
-	base = malloc(sizeof(char) * 17);
-	base = "0123456789abcdef\0";
 	if (adr / 16 > 0)
 		ft_putadresse2(adr / 16);
 	ft_putchar(base[adr % 16]);
-	free(base);
 }
 
 void			ft_putadresse(const void *adresse)

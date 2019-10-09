@@ -3,10 +3,10 @@
 /*                                                              /             */
 /*   ft_strnew.c                                      .::    .:/ .      .::   */
 /*                                                 +:+:+   +:    +:  +:+:+    */
-/*   By: kgrosjea <marvin@le-101.fr>                +:+   +:    +:    +:+     */
+/*   By: matheme <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
-/*   Created: 2018/10/04 21:56:31 by kgrosjea     #+#   ##    ##    #+#       */
-/*   Updated: 2018/10/04 22:18:48 by kgrosjea    ###    #+. /#+    ###.fr     */
+/*   Created: 2018/10/08 12:13:08 by matheme      #+#   ##    ##    #+#       */
+/*   Updated: 2018/10/08 17:16:07 by matheme     ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -15,5 +15,5 @@
 
 char	*ft_strnew(size_t size)
 {
-	return ((char *)ft_memalloc(size + 1));
+	return ((char*)ft_memalloc(size + 1));
 }

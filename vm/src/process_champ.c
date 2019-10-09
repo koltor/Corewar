@@ -6,7 +6,7 @@
 /*   By: matheme <matheme@student.le-101.fr>        +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/09/30 10:12:48 by matheme      #+#   ##    ##    #+#       */
-/*   Updated: 2019/10/01 13:14:53 by matheme     ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/10/03 11:48:02 by ocrossi     ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -18,7 +18,7 @@
 ** importe le resultat
 */
 
-static int			close_file(int nbfile, int files[MAX_PLAYERS])
+static void	close_file(int nbfile, int files[MAX_PLAYERS], int err)
 {
 	int i;
 
@@ -28,7 +28,21 @@ static int			close_file(int nbfile, int files[MAX_PLAYERS])
 		if (files[i] != -1)
 			close(files[i]);
 	}
-	return (0);
+	if (err)
+		f_error(err);
+}
+
+static int	get_pos_of_champs_arena(int n_champ, int nb_champs)
+{
+	float	section;
+
+	if (nb_champs != 0)
+		section = MEM_SIZE / nb_champs;
+	else
+		section = MEM_SIZE;
+	if (section - (int)section > 0.5)
+		section = section + 1.0;
+	return (n_champ * (int)section);
 }
 
 /*
@@ -37,37 +51,27 @@ static int			close_file(int nbfile, int files[MAX_PLAYERS])
 ** et de combien de champion il à déjà placé au prealable
 */
 
-static void			put_champ_on_arena(int n_champ, char arena[], const char champ[], int nb_champs, int champ_size)
+static void	put_champ_on_arena(int p, char arna[], const char ch[], int ch_size)
 {
-    float section;
-    int     i;
-
-	if (nb_champs != 0)
-    	section = MEM_SIZE / nb_champs;
-	else
-		section = MEM_SIZE;
-    if (section - (int)section > 0.5)
-        section = section + 1.0;
-    i = n_champ * (int)section;
-    ft_memcpy(&arena[i], &champ[16 + PROG_NAME_LENGTH + COMMENT_LENGTH], champ_size);
+	ft_memcpy(&arna[p], &ch[16 + PROG_NAME_LENGTH + COMMENT_LENGTH], ch_size);
 }
 
 /*
-** check_data_of_champ verifie les informations d'header contunu dans le champion
+** check_data_of_champ verifie les informations header contunu dans le champion
 ** et renvoie 0 en cas d'erreur dans le header.
-** il verifie également la correspondance de la taille du programme avec le programme
-** transmis.
+** il verifie également la correspondance de la taille du programme avec
+** le programme transmis.
 */
 
-int					check_data_of_champ(t_header header, int file_len)
+int			check_data_of_champ(t_header header, int file_len)
 {
 	if (header.magic != COREWAR_EXEC_MAGIC)
-		return (0);
+		return (ERR_FILE_MAGIC);
 	if (header.prog_size > CHAMP_MAX_SIZE)
-		return (0);
-	if (header.prog_size != file_len - ( 16 + PROG_NAME_LENGTH + COMMENT_LENGTH))
-		return (0);
-	return (1);
+		return (ERR_FILE_SIZE);
+	if (header.prog_size != file_len - 16 - PROG_NAME_LENGTH - COMMENT_LENGTH)
+		return (ERR_FILE_CORRUPT);
+	return (0);
 }
 
 /*
@@ -76,22 +80,25 @@ int					check_data_of_champ(t_header header, int file_len)
 ** et les places sur l'arene equitablement.
 */
 
-void				process_champ(t_option arg_data, t_header (*header)[MAX_PLAYERS], char *arena)
+void		process_champ(t_option *arg_data, t_header (*header)[], char *arena)
 {
-	char buff[CHAMP_MAX_SIZE + PROG_NAME_LENGTH + COMMENT_LENGTH];
-	int file_len;
-	int i;
+	char	buff[CHAMP_MAX_SIZE + PROG_NAME_LENGTH + COMMENT_LENGTH + 20];
+	int		file_len;
+	int		i;
+	int		err;
+	int		pos_champ;
 
 	i = -1;
-	while (++i < arg_data.nb_champ)
+	while (++i < arg_data->nb_champ)
 	{
-		file_len = read(arg_data.fd[i], &buff, CHAMP_MAX_SIZE + PROG_NAME_LENGTH + COMMENT_LENGTH);
+		file_len = read(arg_data->fd[i], &buff,
+				CHAMP_MAX_SIZE + PROG_NAME_LENGTH + COMMENT_LENGTH + 20);
 		get_data_of_champ(&(*header)[i], buff);
-		if (!check_data_of_champ((*header)[i], file_len))
-			break ;
-		put_champ_on_arena(i, arena, buff, arg_data.nb_champ, (*header)[i].prog_size);
+		if ((err = check_data_of_champ((*header)[i], file_len)))
+			close_file(arg_data->nb_champ, arg_data->fd, err);
+		pos_champ = get_pos_of_champs_arena(i, arg_data->nb_champ);
+		put_champ_on_arena(pos_champ, arena, buff, (*header)[i].prog_size);
 	}
-	close_file(arg_data.nb_champ, arg_data.fd);
-	if (i < arg_data.nb_champ)
-		invalid_champs();
+	set_n_number(arg_data);
+	close_file(arg_data->nb_champ, arg_data->fd, 0);
 }

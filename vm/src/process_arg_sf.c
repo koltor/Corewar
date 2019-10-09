@@ -6,7 +6,7 @@
 /*   By: matheme <matheme@student.le-101.fr>        +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/09/27 13:28:58 by matheme      #+#   ##    ##    #+#       */
-/*   Updated: 2019/09/30 10:38:41 by matheme     ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/10/09 10:16:36 by matheme     ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -21,32 +21,31 @@
 ** modifie: l'expected_arg
 */
 
-void		get_value_for(char *str, t_option *arg_data)
+void		get_value_for(char *str, t_option *data)
 {
-	long	value;
+	long	val;
 	int		i;
 
 	i = -1;
-	value = ft_atol(str);
-	if (value < -2147483648 || value > 2147483647 || value == 0)
-		value = -1;
-	if (arg_data->expected_arg == 1)
+	val = ft_atol(str);
+	if (((val < 0 || val > 2147483647) && data->expected_arg != 3) ||
+		((val < 0 || val > 31) && data->expected_arg == 3))
+		val = -2;
+	if (data->expected_arg == 1)
 	{
-		if (arg_data->nb_champ >= MAX_PLAYERS)
-		{
-			arg_data->expected_arg = 3;
+		if (data->nb_champ >= MAX_PLAYERS && (data->expected_arg = 4))
 			return ;
-		}
 		while (++i < MAX_PLAYERS)
-			if (value == arg_data->n[i])
-				value = -1;
-		arg_data->n[arg_data->nb_champ] = value;
-		arg_data->expected_arg = 3;
+			if (val == data->n[i])
+				val = -2;
+		data->n[data->nb_champ] = val;
+		data->expected_arg = 4;
 	}
 	else
 	{
-		arg_data->dump = value;
-		arg_data->expected_arg = 0;
+		data->dump = (data->expected_arg == 2) ? val : data->dump;
+		data->verbose = (data->expected_arg == 3) ? val : data->verbose;
+		data->expected_arg = 0;
 	}
 }
 
@@ -54,23 +53,20 @@ void		get_value_for(char *str, t_option *arg_data)
 ** liste des options traiter
 ** pour rajouter une option il suffit de recopier le patern suivant
 ** modifie: l'expected_arg
-** modifie: option
 */
 
-static int	ft_listing_option(char c, int option, char *expected_arg)
+static void	ft_listing_option(char c, char *expected_arg)
 {
-	c == 'v' ? option = option | +2 : 0;
-	c == 'd' ? option = option | +1 : 0;
+	c == 'v' ? *expected_arg = 3 : 0;
 	c == 'd' ? *expected_arg = 2 : 0;
 	c == 'n' ? *expected_arg = 1 : 0;
-	return (option);
 }
 
 /*
 ** get_option reçois l'argument actuel à traiter et la traite comme étant
 ** une option ou des options.
-** avance dans la string tant que expected_arg est egal à 0 et que les differentes
-** options sont connus
+** avance dans la string tant que expected_arg est egal à 0
+** et que les differentes options sont connus
 */
 
 void		get_option(char *str, t_option *arg_data)
@@ -80,12 +76,12 @@ void		get_option(char *str, t_option *arg_data)
 	i = 1;
 	while (str[i])
 	{
-		if (ft_strchr(LIST_OPTION, str[i]) == NULL || arg_data->expected_arg != 0)
+		if (ft_strchr(LIST_OPTION, str[i]) == NULL || arg_data->expected_arg)
 		{
-			arg_data->option = -1;
+			arg_data->expected_arg = -1;
 			break ;
 		}
-		arg_data->option = ft_listing_option(str[i], arg_data->option, &arg_data->expected_arg);
+		ft_listing_option(str[i], &arg_data->expected_arg);
 		i++;
 	}
 }
@@ -134,7 +130,8 @@ void		get_champ(char *champ_path, t_option *arg_data)
 		return ;
 	}
 	arg_data->fd[arg_data->nb_champ] = open(champ_path, O_RDONLY);
-	if (read(arg_data->fd[arg_data->nb_champ], NULL, 0) < 0)
+	if (arg_data->fd[arg_data->nb_champ] != -1 &&
+		read(arg_data->fd[arg_data->nb_champ], NULL, 0) < 0)
 	{
 		close(arg_data->fd[arg_data->nb_champ]);
 		arg_data->fd[arg_data->nb_champ] = -1;

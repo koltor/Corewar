@@ -6,7 +6,7 @@
 /*   By: matheme <matheme@student.le-101.fr>        +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/10/04 14:39:00 by matheme      #+#   ##    ##    #+#       */
-/*   Updated: 2019/05/06 11:01:20 by matheme     ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/10/09 14:44:12 by matheme     ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -19,6 +19,7 @@
 # include <unistd.h>
 
 # define BUFF_SIZE 1000
+# define HEXDUMP_COLS 64
 
 typedef struct		s_glist
 {
@@ -95,4 +96,9 @@ int					*ft_tab_sub(int *pile, int size);
 int					get_next_line(const int fd, char **line);
 void				ft_lstadd(t_list **alst, t_list *new);
 t_list				*ft_lstnew(void const *content, size_t content_size);
+void				ft_lstdelone(t_list **alst, void (*del)(void*, size_t));
+void				ft_lstdel(t_list **alst, void (*del)(void*, size_t));
+void				ft_hexdump(void *mem, unsigned int len);
+short				short_reverse_octet(short n);
+unsigned int		unsigned_int_reverse_octet(unsigned int n);
 #endif
