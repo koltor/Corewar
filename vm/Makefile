@@ -1,23 +1,10 @@
-# **************************************************************************** #
-#                                                           LE - /             #
-#                                                               /              #
-#    Makefile                                         .::    .:/ .      .::    #
-#                                                  +:+:+   +:    +:  +:+:+     #
-#    By: matheme <matheme@student.le-101.fr>        +:+   +:    +:    +:+      #
-#                                                  #+#   #+    #+    #+#       #
-#    Created: 2019/03/14 16:56:52 by matheme      #+#   ##    ##    #+#        #
-#    Updated: 2019/10/09 10:35:41 by matheme     ###    #+. /#+    ###.fr      #
-#                                                          /                   #
-#                                                         /                    #
-# **************************************************************************** #
-
 # nom de l'executable
 NAME = corewar
 
 # les routes
 SRC_PATH		= src
 SRC_INST_PATH	= instructions
-OBJ_PATH		= obj
+OBJ_PATH		= bins
 INC_PATH		= includes
 LIB_PATH		= librairies
 
@@ -80,10 +67,13 @@ clean :
 	@make -C $(LIBFT) clean
 	@rmdir $(OBJ_PATH)/$(SRC_INST_PATH) 2> /dev/null || true
 	@rmdir $(OBJ_PATH) 2> /dev/null || true
+	@echo "\t\033[32m\033[0m"
+	@echo "\033[37m \n (✌ﾟ∀ﾟ)☞  delete bins \n\033[0m"
 
 fclean: clean
 	@make -C $(LIBFT) fclean
 	@rm -f $(NAME)
+	@echo "\033[33m \n DELETE COREWAR ᕙ(⇀‸↼‶)ᕗ  \n\033[0m"
 
 re: fclean all
 

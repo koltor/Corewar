@@ -6,7 +6,7 @@
 /*   By: matheme <matheme@student.le-101.fr>        +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/10/07 11:13:39 by matheme      #+#   ##    ##    #+#       */
-/*   Updated: 2019/10/09 17:12:50 by matheme     ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/10/10 15:39:49 by matheme     ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -64,15 +64,15 @@ void    long_indirect_load(t_process *process, t_data *arena_data, int verbose)
     decalement += process_first_arg(process->pc + decalement, get_ocp_params(ocp, 1), arena_data->arena, &params1);
 	decalement += process_secon_arg(process->pc + decalement, get_ocp_params(ocp, 2), arena_data->arena, &params2);
 	ft_memcpy(&r1, &arena_data->arena[process->pc + decalement], 1);
-	process->reg[r1 - 1] = arena_data->arena[((params1 + params2)) % MEM_SIZE] & 0x000000ff;
+	process->reg[r1 - 1] = arena_data->arena[((process->pc + params1 + params2)) % MEM_SIZE] & 0x000000ff;
 	if (process->reg[r1 - 1] == 0)
 		process->carry = 1;
 	else
 		process->carry = 0;
 	if (verbose & VERBOSE_SHOW_OPERATIONS)
 	{
-		FP("P    %d | ldi %hd %hd r%hhd\n", process->id, params1, params2, r1);
-		FP("       | -> load from %hd + %hd = %d (with pc and mod %d)\n", params1, params2,
-			(unsigned int)params1 + (unsigned int)params2, (unsigned int)params1 + (unsigned int)params2);
+		FP("P    %d | lldi %hd %hd r%hhd\n", process->id, params1, params2, r1);
+		FP("       | -> load from %hd + %hd = %d (with pc %hd)\n", params1, params2,
+			(unsigned int)params1 + (unsigned int)params2, params1);
 	}
 }

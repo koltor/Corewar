@@ -6,7 +6,7 @@
 /*   By: matheme <matheme@student.le-101.fr>        +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/10/01 15:11:34 by ocrossi      #+#   ##    ##    #+#       */
-/*   Updated: 2019/10/09 10:12:33 by matheme     ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/10/10 11:59:28 by ocrossi     ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -64,10 +64,13 @@ t_list		*generate_process_list(t_option arg_data, char *arena)
 	ft_bzero(&proc, sizeof(proc));
 	if (!(begin = ft_lstnew(&proc, sizeof(proc))))
 		free_proccess_list_in_case_of_error(begin);
+	/***************TEST*********************/
+//	((t_process *)(begin->content))->carry = 1;
 	((t_process *)(begin->content))->id_player = 0;
 	((t_process *)(begin->content))->reg[0] = arg_data.n[0];
 	((t_process *)(begin->content))->id = 1;
 	((t_process *)(begin->content))->pc = get_pc(arg_data.nb_champ, 0);
+//	((t_process *)(begin->content))->opc = get_op_number(arg_data.nb_champ, 0);
 	get_cycle_instr(((t_process *)(begin->content)), arena);
 	while (i < arg_data.nb_champ)
 	{
@@ -76,6 +79,8 @@ t_list		*generate_process_list(t_option arg_data, char *arena)
 		ft_lstadd(&begin, tmp);
 		((t_process *)(tmp->content))->id_player = i;
 		((t_process *)(tmp->content))->id = i + 1;
+		/***************TEST*********************/
+//		((t_process *)(tmp->content))->carry = 1;
 		((t_process *)(begin->content))->pc = get_pc(arg_data.nb_champ, i);
 		get_cycle_instr(((t_process *)(begin->content)), arena);
 		i++;

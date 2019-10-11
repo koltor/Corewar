@@ -6,20 +6,14 @@
 /*   By: matheme <matheme@student.le-101.fr>        +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/10/03 11:55:14 by ocrossi      #+#   ##    ##    #+#       */
-/*   Updated: 2019/10/09 16:35:23 by matheme     ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/10/11 13:49:57 by ocrossi     ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
 
 #include "corewar.h"
 
-/*
-**
-**
-**
-*/
-
-static void		*get_funtion_to_execute(int value)
+static void		*get_funtion_to_execute(t_process *process)
 {
 	static void	(*p[16])(t_process*, t_data*, int) = {
 		&live,
@@ -40,29 +34,31 @@ static void		*get_funtion_to_execute(int value)
 		&aff
 	};
 
-	if (value >= 0x01 || value <= 0x10)
-		return (p[value - 1]);
+	if (process->opc_curr >= 0x01 || process->opc_curr <= 0x10)
+	{
+		return (p[process->opc_curr - 1]);
+	}
 	return (NULL);
 }
 
 /*
-** exec_instruc  est appelé lors de l'execution d'une instruction
+** exec_instruc est appelé lors de l'execution d'une instruction
 */
 
 static void		exec_instr(t_process *process, t_data *arena_data, int verbose)
 {
 	void (*f)(t_process*, t_data*, int);
 
-	f = get_funtion_to_execute(process->opc_curr);
+	f = get_funtion_to_execute(process);
 	if (f != NULL)
+	{
+		process->to_move = true;
 		f(process, arena_data, verbose);
+	}
 }
 
-int				browse_lst(t_list *begin, t_data *arena_data, int verbose)
+void			browse_lst(t_list *begin, t_data *arena_data, int verbose)
 {
-	int 	ret;
-
-	ret = 0;
 	begin = arena_data->pchain;
 	while (begin)
 	{
@@ -70,11 +66,8 @@ int				browse_lst(t_list *begin, t_data *arena_data, int verbose)
 		if (((t_process *)(begin->content))->cycle == 0)
 		{
 			exec_instr(begin->content, arena_data, verbose);
-		//	tester_1_lst(begin);
-			process_move(begin, arena_data);
-			ret++;
+			process_move(begin->content, arena_data, verbose);
 		}
 		begin = begin->next;
 	}
-	return (ret);
 }

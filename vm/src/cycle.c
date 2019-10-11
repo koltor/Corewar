@@ -6,7 +6,7 @@
 /*   By: matheme <matheme@student.le-101.fr>        +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/10/07 09:58:46 by matheme      #+#   ##    ##    #+#       */
-/*   Updated: 2019/10/09 17:28:11 by matheme     ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/10/10 17:01:10 by matheme     ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -25,11 +25,15 @@ static void     max_check_live(t_data *arena_data)
 	{
 		arena_data->cycle_to_die -= CYCLE_DELTA;
 		arena_data->nb_check = 0;
+		if (arena_data->verbose & VERBOSE_SHOW_CYCLES)
+			FP("Cycle to die is now %d\n", arena_data->cycle_to_die);
 	}
 	else if (arena_data->nb_check == MAX_CHECKS)
 	{
 		arena_data->cycle_to_die -= CYCLE_DELTA;
 		arena_data->nb_check = 0;
+		if (arena_data->verbose & VERBOSE_SHOW_CYCLES)
+			FP("Cycle to die is now %d\n", arena_data->cycle_to_die);
 	}
 }
 
@@ -141,6 +145,7 @@ static void	cycle_to_die(t_data *arena_data, long *cycle_local)
 		arena_data->nb_check += 1;
 		*cycle_local = 0;
 		max_check_live(arena_data);
+		arena_data->nb_live = 0;
 		kill_dead_process(arena_data);
 }
 
@@ -151,7 +156,7 @@ static void	cycle_to_die(t_data *arena_data, long *cycle_local)
 ** incremente le nombre de cycle à chaque tour de boucle
 */
 
-void	cycle(t_data *arena_data, t_header champs_data[], t_list *process_chain, int verbose)
+void	cycle(t_data *arena_data, t_list *process_chain, int verbose)
 {
 	long cycle_local;
 

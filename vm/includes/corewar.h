@@ -6,7 +6,7 @@
 /*   By: matheme <matheme@student.le-101.fr>        +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/09/25 17:35:25 by matheme      #+#   ##    ##    #+#       */
-/*   Updated: 2019/10/09 11:03:57 by matheme     ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/10/11 14:07:58 by matheme     ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -38,6 +38,12 @@
 /*****************************
  * definition des structures *
 *****************************/
+
+typedef	enum		e_bool
+{
+	true = 1,
+	false = 0
+}					t_bool;
 
 typedef struct		s_op
 {
@@ -74,6 +80,8 @@ typedef struct			s_data
 	int					cycle_to_die;
 	char				arena[MEM_SIZE];
 	int					last_player_alive;
+	int					n[MAX_PLAYERS];
+	t_header			champs_data[MAX_PLAYERS];
 	t_list				*pchain;
 }						t_data;
 
@@ -85,8 +93,12 @@ typedef struct			s_process
 	int					is_alive;
 	char				id_player;
 	int					carry;
-	char				opc_curr;
+	unsigned char		opc_curr;
+	unsigned char		ocp_cr;
+	unsigned char		curr_op_size;
 	unsigned int		id;
+	t_bool				to_move;
+	t_bool				valid_ocp;
 	t_list				*prev;
 }						t_process;
 
@@ -95,8 +107,7 @@ typedef struct			s_process
 ******************************************/
 void	init_arena_data(t_data *arena_data);
 void	init_arg_data(t_option *arg_data);
-t_list	*generate_process_list(t_option arg_data, char *arena); // version liste -- a voir si c est coherent
-//t_process	*gen_process_tab(t_option arg_data);   // bon les listes ont l air d etre plus simples d utilisation finalement
+t_list	*generate_process_list(t_option arg_data, char *arena);
 
 /***********************
  * Fonction de parsing *
@@ -141,9 +152,9 @@ void	tester_1_lst(t_list *elem);
  * partie cycle		  *
 **********************/
 
-int		browse_lst(t_list *begin, t_data *arena_data, int verbose);
-void	cycle(t_data *arena_data, t_header champs_data[], t_list *process_chain, int verbose);
-long	process_move(t_list *proc, t_data *arena_data);
+void	browse_lst(t_list *begin, t_data *arena_data, int verbose);
+int		process_move(t_process *proc, t_data *arena_data, int verbose);
+void	cycle(t_data *arena_data, t_list *process_chain, int verbose);
 
 /***********************
  *   les instructions  *
