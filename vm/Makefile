@@ -2,17 +2,17 @@
 NAME = corewar
 
 # les routes
-SRC_PATH		= src
+SRC_PATH		= srcs
 SRC_INST_PATH	= instructions
+SRC_AUX_PATH	= auxiliary_function
 OBJ_PATH		= bins
 INC_PATH		= includes
 LIB_PATH		= librairies
 
 # nom des fichier code source (*.c)
-NAME_SRC_COREWAR = corewar.c error.c debug.c process_arg.c \
-					process_champ.c process_arg_sf.c process_champ_sf.c \
-					generate_start_process.c browse_lst.c cycle.c op.c \
-					move_process.c \
+NAME_SRC_COREWAR =	corewar.c process_arg.c process_arg_sf.c \
+					process_champ.c process_champ_sf.c generate_start_process.c \
+					cycle.c browse_process.c move_process.c clean_process.c \
 					$(SRC_INST_PATH)/live.c $(SRC_INST_PATH)/direct_load.c \
 					$(SRC_INST_PATH)/direct_store.c $(SRC_INST_PATH)/aritmetical_addition.c \
 					$(SRC_INST_PATH)/aritmetical_substraction.c $(SRC_INST_PATH)/logical_and.c \
@@ -20,7 +20,8 @@ NAME_SRC_COREWAR = corewar.c error.c debug.c process_arg.c \
 					$(SRC_INST_PATH)/jump_if_zero.c $(SRC_INST_PATH)/indirect_load.c \
 					$(SRC_INST_PATH)/indirect_store.c $(SRC_INST_PATH)/short_fork.c \
 					$(SRC_INST_PATH)/long_direct_load.c $(SRC_INST_PATH)/long_indirect_load.c \
-					$(SRC_INST_PATH)/long_fork.c $(SRC_INST_PATH)/aff.c
+					$(SRC_INST_PATH)/long_fork.c $(SRC_INST_PATH)/aff.c \
+					$(SRC_AUX_PATH)/error.c $(SRC_AUX_PATH)/debug.c $(SRC_AUX_PATH)/op.c
 
 #nom des ficher objects (*.o)
 NAME_OBJ_COREWAR = $(NAME_SRC_COREWAR:.c=.o)
@@ -56,6 +57,7 @@ $(NAME) : $(OBJ_COREWAR) $(LIBFT.A) $(PRINTF.A)
 $(OBJ_PATH)/%.o : $(SRC_PATH)/%.c $(HEADER_COREWAR)
 	@mkdir $(OBJ_PATH) 2> /dev/null || true
 	@mkdir $(OBJ_PATH)/$(SRC_INST_PATH) 2> /dev/null || true
+	@mkdir $(OBJ_PATH)/$(SRC_AUX_PATH) 2> /dev/null || true
 	@$(CC) -I $(LIBFT) -I $(PRINTF_INCLUDE) -I $(INC_PATH) -c $< -o $@
 	@printf "\033[2K\r\033[36m>>Compiling \033[37m$<\033[36m \033[0m"
 
@@ -66,6 +68,7 @@ clean :
 	@rm -f $(OBJ_COREWAR)
 	@make -C $(LIBFT) clean
 	@rmdir $(OBJ_PATH)/$(SRC_INST_PATH) 2> /dev/null || true
+	@rmdir $(OBJ_PATH)/$(SRC_AUX_PATH) 2> /dev/null || true
 	@rmdir $(OBJ_PATH) 2> /dev/null || true
 	@echo "\t\033[32m\033[0m"
 	@echo "\033[37m \n (✌ﾟ∀ﾟ)☞  delete bins \n\033[0m"

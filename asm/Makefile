@@ -6,7 +6,7 @@
 #    By: kgrosjea <kgrosjea@student.le-101.fr>      +:+   +:    +:    +:+      #
 #                                                  #+#   #+    #+    #+#       #
 #    Created: 2018/10/17 11:23:06 by kgrosjea     #+#   ##    ##    #+#        #
-#    Updated: 2019/10/08 17:35:56 by kgrosjea    ###    #+. /#+    ###.fr      #
+#    Updated: 2019/10/11 15:52:57 by kgrosjea    ###    #+. /#+    ###.fr      #
 #                                                          /                   #
 #                                                         /                    #
 # **************************************************************************** #
@@ -30,15 +30,18 @@ INC			=	./includes/			\
 
 SRC			=	main.c				\
 				command_list.c		\
-				parse_and_cut.c		\
-				parsing.c			\
-				compute_and_check.c	\
+				parse_command.c		\
+				parse_file.c		\
+				compute_champ.c		\
+				compute_param.c		\
+				write_to_cor.c		\
 				op_infos.c			\
 				new_struct.c		\
 				op.c				\
 				utils.c				\
+				ft_unsigned_int_reverse_octet.c	\
+				ft_unsigned_short_reverse_octet.c	\
 				str_multisplit.c	\
-				debug.c
 
 BIN			=	$(SRC:.c=.o)
 
