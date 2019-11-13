@@ -6,7 +6,7 @@
 /*   By: matheme <matheme@student.le-101.fr>        +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/10/03 10:15:46 by matheme      #+#   ##    ##    #+#       */
-/*   Updated: 2019/10/15 14:39:05 by matheme     ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/10/16 14:11:42 by ocrossi     ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -24,7 +24,7 @@ static void	write_adress(char *buff, const char base[16], short *pos, int i)
 	buff[*pos + 6] = ' ';
 	buff[*pos + 7] = ':';
 	buff[*pos + 8] = ' ';
-	*pos += 8;
+	*pos += 9;
 }
 
 void		ft_hexdump(void *mem, unsigned int len)
@@ -32,7 +32,7 @@ void		ft_hexdump(void *mem, unsigned int len)
 	const char		base[16] = "0123456789abcdef";
 	unsigned int	i;
 	short			pos;
-	char			buff[12864];
+	char			buff[12929];
 
 	i = 0;
 	pos = 0;
@@ -49,5 +49,5 @@ void		ft_hexdump(void *mem, unsigned int len)
 		i++;
 	}
 	buff[pos] = '\0';
-	write(1, &buff, 12864);
+	write(1, &buff, 12929);
 }

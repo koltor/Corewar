@@ -3,10 +3,10 @@
 /*                                                              /             */
 /*   ft_lstnew.c                                      .::    .:/ .      .::   */
 /*                                                 +:+:+   +:    +:  +:+:+    */
-/*   By: ocrossi <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
+/*   By: kgrosjea <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
-/*   Created: 2018/10/19 15:02:31 by ocrossi      #+#   ##    ##    #+#       */
-/*   Updated: 2019/01/14 20:27:10 by ocrossi     ###    #+. /#+    ###.fr     */
+/*   Created: 2018/10/05 23:49:39 by kgrosjea     #+#   ##    ##    #+#       */
+/*   Updated: 2018/10/08 14:40:57 by kgrosjea    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -15,22 +15,22 @@
 
 t_list	*ft_lstnew(void const *content, size_t content_size)
 {
-	t_list *new;
+	t_list	*link;
 
-	if (!(new = (t_list*)malloc(sizeof(t_list))))
+	if (!(link = (t_list *)malloc(sizeof(t_list))))
 		return (NULL);
-	if (!(new->content = (t_list*)malloc(content_size)))
-		return (NULL);
-	if (content == NULL)
+	if (content)
 	{
-		new->content = NULL;
-		new->content_size = 0;
+		if (!(link->content = ft_memalloc(content_size)))
+			return (NULL);
+		ft_memcpy(link->content, content, content_size);
+		link->content_size = content_size;
 	}
 	else
 	{
-		ft_memcpy(new->content, content, content_size);
-		new->content_size = content_size;
+		link->content = NULL;
+		link->content_size = 0;
 	}
-	new->next = NULL;
-	return (new);
+	link->next = NULL;
+	return (link);
 }

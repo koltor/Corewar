@@ -3,107 +3,106 @@
 /*                                                              /             */
 /*   get_next_line.c                                  .::    .:/ .      .::   */
 /*                                                 +:+:+   +:    +:  +:+:+    */
-/*   By: matheme <matheme@student.le-101.fr>        +:+   +:    +:    +:+     */
+/*   By: kgrosjea <kgrosjea@student.le-101.fr>      +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
-/*   Created: 2018/10/18 16:34:39 by matheme      #+#   ##    ##    #+#       */
-/*   Updated: 2019/02/12 17:19:32 by matheme     ###    #+. /#+    ###.fr     */
+/*   Created: 2018/10/08 16:25:40 by kgrosjea     #+#   ##    ##    #+#       */
+/*   Updated: 2019/10/31 13:36:35 by kgrosjea    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
 
 #include "libft.h"
+#include <stdio.h>
 
-static	int		ft_getline(const int fd, char **tab)
+static char			*ft_readl(const int fd, char *dst)
 {
-	char	buff[BUFF_SIZE + 1];
-	char	*temp;
 	int		ret;
+	char	buffer[BUFF_SIZE + 1];
 
 	ret = 1;
-	while (!ft_strchr(*tab, '\n') && ret > 0)
+	if (!dst)
+		dst = ft_strnew(0);
+	while (!(ft_strctn(dst, '\n')) && ret > 0)
 	{
-		if ((ret = read(fd, buff, BUFF_SIZE)) > 0)
-		{
-			buff[ret] = '\0';
-			if (!(temp = ft_strjoin(*tab, buff)))
-				return (-1);
-			free(*tab);
-			*tab = temp;
-		}
+		if ((ret = read(fd, buffer, BUFF_SIZE)) == -1)
+			return (NULL);
+		buffer[ret] = '\0';
+		dst = ft_strjoin_f(dst, buffer, 1);
 	}
+	return (dst);
+}
+
+static t_restfd		*ft_get_struct(const int fd, t_restfd **first)
+{
+	t_restfd	*tmp;
+	t_restfd	*curr;
+
+	curr = *first;
+	tmp = NULL;
+	if (*first)
+	{
+		if (curr->fd == fd)
+			return (curr);
+		while (curr->next)
+			if (curr->next->fd == fd)
+				return (curr->next);
+			else
+				curr = curr->next;
+	}
+	if (!(tmp = (t_restfd *)malloc(sizeof(t_restfd))))
+		return (NULL);
+	tmp->fd = fd;
+	tmp->rest = NULL;
+	tmp->next = NULL;
+	if (curr)
+		curr->next = tmp;
+	else
+		*first = tmp;
+	return (tmp);
+}
+
+static int			ft_clean(t_restfd **first, t_restfd *curr, int ret)
+{
+	t_restfd	*tmp;
+
+	tmp = NULL;
+	if (curr == *first)
+		*first = curr->next;
+	else
+	{
+		tmp = *first;
+		while (tmp->next != curr)
+			tmp = tmp->next;
+		tmp->next = curr->next;
+	}
+	ft_strdel(&(curr->rest));
+	ft_memdel((void **)&curr);
 	return (ret);
 }
 
-static	int		ft_newline(char **tab, char **line)
+int					get_next_line(const int fd, char **line)
 {
-	int		i;
-	char	*temp;
-	int		newl;
+	static t_restfd	*first = NULL;
+	t_restfd		*curr;
+	char			*tmp;
+	int				line_len;
 
-	i = 0;
-	newl = 0;
-	if (!(*tab)[0])
-	{
-		*line = NULL;
-		return (0);
-	}
-	while ((*tab)[i] && (*tab)[i] != '\n')
-		i++;
-	if ((*tab)[i] == '\n')
-		newl = 1;
-	*line = ft_strsub(*tab, 0, i);
-	if (!(temp = ft_strsub(*tab, i + newl, ft_strlen(*tab))))
-		return (-1);
-	*tab = ft_strcpy(*tab, temp);
-	free(temp);
-	return (0);
-}
-
-static	t_glist	*find_fd(t_glist **lst, const int fd)
-{
-	while ((*lst)->next)
-	{
-		if ((*lst)->fd == fd)
-			return (*lst);
-		if ((*lst)->next)
-			*lst = (*lst)->next;
-	}
-	if ((*lst)->fd == fd)
-		return (*lst);
-	if (!((*lst)->next = malloc(sizeof(t_glist))))
-		return (NULL);
-	(*lst)->next->fd = fd;
-	(*lst)->next->next = NULL;
-	if (!((*lst)->next->line = ft_strnew(0)))
-		return (NULL);
-	return ((*lst)->next);
-}
-
-int				get_next_line(const int fd, char **line)
-{
-	static t_glist	*lst = NULL;
-	t_glist			*begin;
-
-	if (fd < 0 || !line || BUFF_SIZE < 1)
-		return (-1);
-	if (!lst)
-	{
-		if (!(lst = malloc(sizeof(t_glist))))
-			return (-1);
-		lst->fd = fd;
-		if (!(lst->line = ft_strnew(0)))
-			return (-1);
-		lst->next = NULL;
-	}
-	begin = lst;
-	if (!(lst = find_fd(&lst, fd)))
-		return (-1);
-	if (ft_getline(fd, &lst->line) == -1)
-		return (-1);
-	if (ft_newline(&lst->line, line) == -1)
-		return (-1);
-	lst = begin;
-	if (*line)
-		return (1);
-	return (0);
+	curr = ft_get_struct(fd, &first);
+	if (!line)
+		return (ft_clean(&first, curr, 0));
+	else if (fd < 0 || BUFF_SIZE <= 0 || read(fd, NULL, 0) < 0 ||
+		!(curr->rest = ft_readl(curr->fd, curr->rest)))
+		return (ft_clean(&first, curr, -1));
+	if (!*curr->rest)
+		return (ft_clean(&first, curr, 0));
+	line_len = 0;
+	while (curr->rest[line_len] != '\n' && curr->rest[line_len])
+		line_len++;
+	if (!curr->rest[line_len])
+		curr->rest = ft_strjoin_f(curr->rest, "\n", 1);
+	*line = ft_strncpy(ft_strnew(line_len), curr->rest, line_len);
+	tmp = curr->rest;
+	curr->rest = ft_strdup(&tmp[line_len + 1]);
+	ft_strdel(&tmp);
+	return (1);
 }

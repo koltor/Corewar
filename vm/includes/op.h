@@ -6,7 +6,7 @@
 /*   By: matheme <matheme@student.le-101.fr>        +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/09/26 11:54:07 by matheme      #+#   ##    ##    #+#       */
-/*   Updated: 2019/10/08 15:05:50 by matheme     ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/12 09:49:03 by matheme     ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -39,7 +39,7 @@
 # define COMMENT_CMD_STRING		".comment"
 # define REG_NUMBER				16
 # define CYCLE_TO_DIE			1536
-# define CYCLE_DELTA				50
+# define CYCLE_DELTA			50
 # define NBR_LIVE				21
 # define MAX_CHECKS				10
 

@@ -3,74 +3,103 @@
 /*                                                              /             */
 /*   long_indirect_load.c                             .::    .:/ .      .::   */
 /*                                                 +:+:+   +:    +:  +:+:+    */
-/*   By: matheme <matheme@student.le-101.fr>        +:+   +:    +:    +:+     */
+/*   By: kgrosjea <kgrosjea@student.le-101.fr>      +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/10/07 11:13:39 by matheme      #+#   ##    ##    #+#       */
-/*   Updated: 2019/10/14 10:37:03 by matheme     ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/13 13:57:25 by kgrosjea    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
 
 #include "corewar.h"
 
-static char	get_ocp_params(char ocp, char params)
+static int	pr_indirect(char n, char *dclm_pc, t_process *process, t_data *data)
 {
-	const char v[4] = {
-		(ocp & 0xc0) >> 6, (ocp & 0x30) >> 4, (ocp & 0xc) >> 2, ocp & 0x3
-	};
+	int val;
 
-	return (v[params - 1]);
-}
-
-static char	process_first_arg(unsigned int pos, char ocp_1, char *arena, short *params)
-{
-	if (ocp_1 == 1)
+	if (n != 1)
 	{
-		ft_memcpy(params, &arena[pos], 1);
-		return (1);
+		*dclm_pc = 0;
+		return (0);
 	}
-	ft_memcpy(params, &arena[pos], 2);
-	*params = short_reverse_octet(*params);
-	return (2);
+	val = 0;
+	ft_memcpy_memsize(&val, &data->arena, process->pc + *dclm_pc, 2);
+	val = (short)unsigned_short_reverse_octet((unsigned short)val);
+	val = val % IDX_MOD;
+	ft_memcpy_memsize(&val, &data->arena, (process->pc + val) % MEM_SIZE, 4);
+	val = (int)unsigned_int_reverse_octet((unsigned int)val);
+	*dclm_pc += 2;
+	return (val);
 }
 
-static char	process_secon_arg(unsigned int pos, char ocp_1, char *arena, short *params)
+static int	pr_direct(char n, char *dclm_pc, t_process *process, t_data *data)
 {
-	if (ocp_1 == 1)
+	int val;
+
+	if (n == 3)
 	{
-		ft_memcpy(params, &arena[pos], 1);
-		return (1);
+		*dclm_pc = 0;
+		return (0);
 	}
-	ft_memcpy(params, &arena[pos], 2);
-	*params = short_reverse_octet(*params);
-	return (2);
+	val = 0;
+	ft_memcpy_memsize(&val, &data->arena, process->pc + *dclm_pc, 2);
+	val = (short)unsigned_short_reverse_octet((unsigned short)val);
+	*dclm_pc += 2;
+	return (val);
 }
 
-void		long_indirect_load(t_process *process, t_data *arena_data, int verbose)
+static int	pr_registre(char n, char *dclm_pc, t_process *process, t_data *data)
 {
-	char	ocp;
-	char	decalement;
-	short	params1;
-	short	params2;
-	char	r1;
+	int val;
 
-	ft_memcpy(&ocp, &arena_data->arena[process->pc + 1], 1);
-	decalement = 2;
-	params1 = 0;
-	params2 = 0;
-	decalement += process_first_arg(process->pc + decalement, get_ocp_params(ocp, 1), arena_data->arena, &params1);
-	decalement += process_secon_arg(process->pc + decalement, get_ocp_params(ocp, 2), arena_data->arena, &params2);
-	ft_memcpy(&r1, &arena_data->arena[process->pc + decalement], 1);
-	process->reg[r1 - 1] = arena_data->arena[((process->pc + params1 + params2)) % MEM_SIZE] & 0x000000ff;
-	if (process->reg[r1 - 1] == 0)
-		process->carry = 1;
-	else
-		process->carry = 0;
+	val = 0;
+	ft_memcpy_memsize(&val, &data->arena, process->pc + *dclm_pc, 1);
+	if (val <= 0 || val >= 17)
+	{
+		*dclm_pc = 0;
+		return (0);
+	}
+	*dclm_pc += 1;
+	if (n == 3)
+		return (val);
+	return (process->reg[val - 1]);
+}
+
+static void	print_verbose(int verbose, t_process *proc, int val[3], char r1)
+{
 	if (verbose & VERBOSE_SHOW_OPERATIONS)
 	{
-		FP("P%5d | lldi %hd %hd r%hhd\n", process->id, params1, params2, r1);
-		FP("       | -> load from %hd + %hd = %d (with pc %hd)\n", params1, params2,
-			(unsigned int)params1 + (unsigned int)params2,
-			process->pc + (unsigned int)params1 + (unsigned int)params2);
+		dprintf(1, "P %4d | lldi %d %d r%hhd\n", proc->id, val[0], val[1], r1);
+		print_space_for_indirect(proc->id);
+		dprintf(1, "| -> load from %d + %d = %d (with pc %d)\n", val[0],
+		val[1], val[0] + val[1], proc->pc + (val[0] + val[1]) % MEM_SIZE);
 	}
+}
+
+void		long_indirect_load(t_process *process, t_data *data, int verbose)
+{
+	char			ocp;
+	char			r1;
+	char			dclm_pc;
+	int				val[3];
+	static int		(*f[3])(char, char*, t_process*, t_data*) = {
+		&pr_registre, &pr_direct, &pr_indirect
+	};
+
+	dclm_pc = 1;
+	ocp = process->ocp_curr;
+	dclm_pc += 1;
+	val[0] = f[get_param_type(ocp, 1) - 1](1, &dclm_pc, process, data);
+	if (dclm_pc != 0)
+		val[1] = f[get_param_type(ocp, 2) - 1](2, &dclm_pc, process, data);
+	if (dclm_pc != 0)
+		r1 = (char)f[get_param_type(ocp, 3) - 1](3, &dclm_pc, process, data);
+	if (dclm_pc == 0)
+		return ;
+	ft_memcpy_memsize(&val[2], &data->arena,
+			(process->pc + val[0] + val[1]) % MEM_SIZE, 4);
+	val[2] = unsigned_int_reverse_octet(val[2]);
+	process->carry = (val[2] == 0) ? 1 : 0;
+	process->reg[r1 - 1] = val[2];
+	print_verbose(verbose, process, val, r1);
 }

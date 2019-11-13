@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                          LE - /            */
 /*                                                              /             */
-/*   new.c                                     .::    .:/ .      .::   */
+/*   new_struct.c                                     .::    .:/ .      .::   */
 /*                                                 +:+:+   +:    +:  +:+:+    */
 /*   By: kgrosjea <kgrosjea@student.le-101.fr>      +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/10/07 13:14:48 by kgrosjea     #+#   ##    ##    #+#       */
-/*   Updated: 2019/10/08 15:41:37 by kgrosjea    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/10/28 15:27:04 by kgrosjea    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -53,7 +53,8 @@ t_param		**new_params(int param_count)
 
 	new_params = NULL;
 	i = 0;
-	if (!(new_params = (t_param **)malloc(sizeof(t_param *) * (param_count + 1))))
+	if (!(new_params = (t_param **)malloc(sizeof(t_param *) *
+		(param_count + 1))))
 		return (NULL);
 	ft_bzero(new_params, sizeof(t_param *) * (param_count + 1));
 	while (i < param_count)

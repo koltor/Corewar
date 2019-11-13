@@ -6,10 +6,11 @@
 /*   By: kgrosjea <kgrosjea@student.le-101.fr>      +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/09/30 13:06:27 by kgrosjea     #+#   ##    ##    #+#       */
-/*   Updated: 2019/10/12 15:46:21 by kgrosjea    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/13 16:29:55 by kgrosjea    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
+
 #ifndef ASM_H
 # define ASM_H
 # include <stdio.h>
@@ -20,14 +21,15 @@
 # include <string.h>
 # include "libft.h"
 # include "op.h"
-# define USAGE "Usage: ./asm [-a] <sourcefile.s>\n\
-\t-a : Instead of creating a .cor file, outputs a stripped and annotated \
-version of the code to the standard output\n"
+
+# define USAGE_1 "Usage: ./asm [-a] <sourcefile.s>\n\t-a : Instead of creating"
+# define USAGE_2 " a .cor file, outputs a stripped and annotated version of the"
+# define USAGE_3 " code to the standard output"
 
 typedef struct	s_param
 {
 	t_arg_type	type;
-	int			size; 
+	int			size;
 	int			code;
 	char		*str;
 	int			value;
@@ -55,62 +57,74 @@ typedef struct	s_champ
 typedef struct	s_data
 {
 	char	*file_name;
-	t_bool	annote;
 	int		fd;
+	char	*line;
 	t_champ	*champ;
 }				t_data;
 
-extern t_op		op_tab[17];
+extern t_op		g_op_tab[17];
 
-/* Parsing */
+/*
+**Parsing
+*/
 
-void		parse_file(int fd, t_champ **champ);
-void		parse_command(char const *str, t_champ **champ, int line_number);
+void			parse_line(t_data **data);
+void			parse_command(t_data **data);
 
-/* Compute */
+/*
+**Compute
+*/
 
-void		compute_champ(t_champ **champ);
-void		compute_param(t_param *param, t_champ *champ, t_command *command);
+void			compute_champ(t_data **data);
+void			compute_param(t_param *param, t_data **data,
+							t_command *command, int arg_pos);
 
-/* Write */
+/*
+**Write
+*/
 
-void		write_header(int fd, t_champ *champ);
-void		write_command(int fd, t_command *command);
-void		write_1_byte(int value, int fd);
-void		write_2_bytes(int value, int fd);
-void		write_4_bytes(int value, int fd);
+void			write_header(t_data *data);
+void			write_command(t_data *data, t_command *command);
 
-/* Op infos */
+/*
+**Op infos
+*/
 
-int			op_param_count(const char *name);
-t_bool		op_exist(const char *name);
-t_bool		op_has_ocp(const char *name);
-t_bool		op_dir_size(const char *name);
-int			op_code(const char *name);
+int				op_param_count(const char *name);
+t_bool			op_exist(const char *name);
+t_bool			op_has_ocp(const char *name);
+t_bool			op_dir_size(const char *name);
+int				op_code(const char *name);
+char			*param_type(int arg_type);
 
-/* Command list */
+/*
+**Command list
+*/
 
-t_command	*last_command(t_champ **champ);
-t_command	*next_command(t_command **command);
+t_command		*last_command(t_champ **champ);
+t_command		*next_command(t_command **command);
 
-/* New struct */
+/*
+**New struct
+*/
 
-t_data		*new_data(void);
-t_champ		*new_champ(void);
-t_command	*new_command(void);
-t_param		**new_params(int param_count);
+t_data			*new_data(void);
+t_champ			*new_champ(void);
+t_command		*new_command(void);
+t_param			**new_params(int param_count);
 
-/* Utils */
+/*
+**Utils
+*/
 
-int			error_exit(char *error_str);
-t_bool		label_exists(char *str, t_command *command_list);
-int			label_index(char *label, t_champ *champ);
-char		**str_multisplit(char const *str, char const *separators);
-t_bool		ft_strctn(const char *str, char c);
-t_bool		str_only_ctn(const char *str, const char *ctn);
-int			count_char(const char *str, char c);
-int			tab_length(void **tab);
-unsigned int	unsigned_int_reverse_octet(unsigned int n);
-unsigned short	unsigned_short_reverse_octet(unsigned short n);
+void			test_str_rest(t_data **data, int pos);
+int				error_exit(char *error_str, t_data **data);
+t_bool			label_exists(char *str, t_command *command_list);
+int				label_index(char *label, t_data **data);
+char			**str_multisplit(char const *str, char const *separators);
+t_bool			str_only_ctn(const char *str, const char *ctn);
+int				count_char(const char *str, char c);
+int				tab_length(void **tab);
+void			free_data(t_data **data);
 
 #endif

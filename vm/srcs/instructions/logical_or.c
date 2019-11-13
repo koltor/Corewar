@@ -3,40 +3,29 @@
 /*                                                              /             */
 /*   logical_or.c                                     .::    .:/ .      .::   */
 /*                                                 +:+:+   +:    +:  +:+:+    */
-/*   By: matheme <matheme@student.le-101.fr>        +:+   +:    +:    +:+     */
+/*   By: kgrosjea <kgrosjea@student.le-101.fr>      +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/10/07 11:09:14 by matheme      #+#   ##    ##    #+#       */
-/*   Updated: 2019/10/14 10:34:11 by matheme     ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/13 13:34:45 by kgrosjea    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
 
 #include "corewar.h"
 
-void	logical_or(t_process *proc, t_data *arena_data, int verbose)
+void		logical_or(t_process *proc, t_data *data, int verbose)
 {
-	char				*r;
-	int					tmp;
-	int					params[2];
-	unsigned char		reg;
-
-	ft_bzero(params, 8);
-	ft_memcpy(&params[0], &arena_data->arena[proc->pc + 2], proc->size_params[0]);
-	ft_memcpy(&params[1], &arena_data->arena[proc->pc + 2 + proc->size_params[0]], proc->size_params[1]);
-	if (proc->size_params[0] == 1)
-		params[0] = proc->reg[params[0] - 1];
-	if (proc->size_params[1] == 1)
-		params[1] = proc->reg[params[1] - 1];
-	convert_params(params, proc);
-	tmp = (int)params[0] | (int)params[1];
-	ft_memcpy(&reg, &arena_data->arena[proc->pc + 2 + proc->size_params[0] + proc->size_params[1]], 1);
-	proc->reg[reg] = tmp;
+	get_params(data, proc);
+	if (!compute_params(data, proc))
+		return ;
+	proc->reg[proc->param[2] - 1] =
+		(proc->param_value[0] | proc->param_value[1]) % IDX_MOD;
+	proc->carry = proc->reg[proc->param[2] - 1] == 0 ? 1 : 0;
 	if (verbose & VERBOSE_SHOW_OPERATIONS)
 	{
-		if (proc->size_params[0] == 1)
-			params[0] = (int)proc->reg[params[0]];
-		if (proc->size_params[1] == 1)
-			params[1] = (int)proc->reg[params[1]];
-		FP("P%5d | or %hhd %hhd r%d\n", proc->id, (char)params[0], (char)params[1], (unsigned char)reg);
+		proc->param[0] = proc->size_params[0] == 0 ? 0 : proc->param[0];
+		proc->param[1] = proc->size_params[1] == 0 ? 0 : proc->param[1];
+		dprintf(1, "P %4d | or %d %d r%d\n", proc->id,
+			proc->param_value[0], proc->param_value[1], proc->param[2]);
 	}
 }

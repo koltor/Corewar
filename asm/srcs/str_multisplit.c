@@ -6,14 +6,14 @@
 /*   By: kgrosjea <kgrosjea@student.le-101.fr>      +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/10/01 14:14:18 by kgrosjea     #+#   ##    ##    #+#       */
-/*   Updated: 2019/10/08 15:51:46 by kgrosjea    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/10/14 16:57:48 by kgrosjea    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
 
 #include "asm.h"
 
-static int	ft_countwords(char const *str, char const *separators)
+static int	wcount(char const *str, char const *separators)
 {
 	unsigned int count;
 
@@ -32,7 +32,7 @@ static int	ft_countwords(char const *str, char const *separators)
 	return (count);
 }
 
-static int	ft_wordlength(char const *str, char const *separators)
+static int	wlength(char const *str, char const *separators)
 {
 	unsigned int length;
 
@@ -52,7 +52,8 @@ char		**str_multisplit(char const *str, char const *separators)
 
 	if (str)
 	{
-		if (!(tab = (char **)malloc(sizeof(char *) * (ft_countwords(str, separators) + 1))))
+		if (!(tab = (char **)malloc(sizeof(char *) *
+		(wcount(str, separators) + 1))))
 			return (NULL);
 		i = 0;
 		while (*str)
@@ -61,7 +62,7 @@ char		**str_multisplit(char const *str, char const *separators)
 				str++;
 			if (*str && !ft_strctn(separators, *str))
 			{
-				if (!(tab[i++] = ft_strsub(str, 0, ft_wordlength(str, separators))))
+				if (!(tab[i++] = ft_strsub(str, 0, wlength(str, separators))))
 					return (NULL);
 			}
 			while (*str && !ft_strctn(separators, *str))

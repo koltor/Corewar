@@ -6,7 +6,7 @@
 #    By: matheme <matheme@student.le-101.fr>        +:+   +:    +:    +:+      #
 #                                                  #+#   #+    #+    #+#       #
 #    Created: 2018/10/03 11:06:26 by yalabidi     #+#   ##    ##    #+#        #
-#    Updated: 2019/10/09 14:45:11 by matheme     ###    #+. /#+    ###.fr      #
+#    Updated: 2019/11/07 14:10:25 by matheme     ###    #+. /#+    ###.fr      #
 #                                                          /                   #
 #                                                         /                    #
 # **************************************************************************** #
@@ -81,7 +81,12 @@ OBJ= 	ft_memcpy.o\
 		ft_lstdelone.o\
 		ft_lstdel.o \
 		ft_unsigned_int_reverse_octet.o \
-		ft_short_reverse_octet.o
+		ft_int_reverse_octet.o \
+		ft_short_reverse_octet.o \
+		ft_unsigned_short_reverse_octet.o \
+		ft_count_signed_number_size.o \
+		ft_itoa_base.o \
+		ft_nblen.o
 
 
 CC=-Wall -Werror -Wextra

@@ -6,7 +6,7 @@
 /*   By: ocrossi <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/10/19 15:02:31 by ocrossi      #+#   ##    ##    #+#       */
-/*   Updated: 2019/01/14 20:27:10 by ocrossi     ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/10/18 16:53:38 by ocrossi     ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -28,6 +28,7 @@ t_list	*ft_lstnew(void const *content, size_t content_size)
 	}
 	else
 	{
+		//ft_bzero(&content, content_size);
 		ft_memcpy(new->content, content, content_size);
 		new->content_size = content_size;
 	}

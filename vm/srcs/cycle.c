@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                          LE - /            */
 /*                                                              /             */
-/*   g_cycle.c                                        .::    .:/ .      .::   */
+/*   cycle.c                                          .::    .:/ .      .::   */
 /*                                                 +:+:+   +:    +:  +:+:+    */
-/*   By: matheme <matheme@student.le-101.fr>        +:+   +:    +:    +:+     */
+/*   By: kgrosjea <kgrosjea@student.le-101.fr>      +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/10/07 09:58:46 by matheme      #+#   ##    ##    #+#       */
-/*   Updated: 2019/10/15 12:53:57 by matheme     ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/13 13:34:45 by kgrosjea    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -19,21 +19,21 @@
 ** decremente cycle_to_die de cycle_delta en cas de besoin
 */
 
-static void		max_check_live(t_data *arena_data)
+static void		max_check_live(t_data *data)
 {
-	if (arena_data->nb_live >= NBR_LIVE)
+	if (data->nb_live >= NBR_LIVE)
 	{
-		arena_data->cycle_to_die -= CYCLE_DELTA;
-		arena_data->nb_check = 0;
-		if (arena_data->verbose & VERBOSE_SHOW_CYCLES)
-			FP("Cycle to die is now %d\n", arena_data->cycle_to_die);
+		data->cycle_to_die -= CYCLE_DELTA;
+		data->nb_check = 0;
+		if (data->verbose & VERBOSE_SHOW_CYCLES)
+			dprintf(1, "Cycle to die is now %d\n", data->cycle_to_die);
 	}
-	else if (arena_data->nb_check == MAX_CHECKS)
+	else if (data->nb_check == MAX_CHECKS)
 	{
-		arena_data->cycle_to_die -= CYCLE_DELTA;
-		arena_data->nb_check = 0;
-		if (arena_data->verbose & VERBOSE_SHOW_CYCLES)
-			FP("Cycle to die is now %d\n", arena_data->cycle_to_die);
+		data->cycle_to_die -= CYCLE_DELTA;
+		data->nb_check = 0;
+		if (data->verbose & VERBOSE_SHOW_CYCLES)
+			dprintf(1, "Cycle to die is now %d\n", data->cycle_to_die);
 	}
 }
 
@@ -44,14 +44,15 @@ static void		max_check_live(t_data *arena_data)
 ** elle s'occupe egalement de supprimer tous les process mort
 */
 
-static t_bool	cycle_to_die(t_data *arena_data, unsigned long long *l_cycle)
+static t_bool	cycle_to_die(t_data *data, long *l_cycle)
 {
-	arena_data->nb_check += 1;
+	data->nb_check += 1;
 	*l_cycle = 0;
-	max_check_live(arena_data);
-	arena_data->nb_live = 0;
-	kill_dead_process(arena_data);
-	if (arena_data->living_process == 0 || arena_data->cycle_to_die <= 0)
+	kill_dead_process(data);
+	max_check_live(data);
+	data->nb_live = 0;
+	data->visu ? set_live_visu_bzero() : 0;
+	if (data->living_process == 0)
 		return (true);
 	return (false);
 }
@@ -63,23 +64,25 @@ static t_bool	cycle_to_die(t_data *arena_data, unsigned long long *l_cycle)
 ** incremente le nombre de cycle à chaque tour de boucle
 */
 
-void			cycle(t_data *arena_data)
+void			cycle(t_data *data)
 {
-	unsigned long long cycle_local;
+	long cycle_local;
 
 	cycle_local = 0;
-	while (++arena_data->cycle != arena_data->dump)
+	while (++data->cycle != data->dump + 1)
 	{
 		cycle_local++;
-		if (arena_data->verbose & VERBOSE_SHOW_CYCLES)
-			FP("It is now cycle %llu\n", arena_data->cycle);
-		browse_process(arena_data);
-		if (cycle_local == arena_data->cycle_to_die)
-			if (cycle_to_die(arena_data, &cycle_local))
+		if (data->verbose & VERBOSE_SHOW_CYCLES)
+			dprintf(1, "It is now cycle %ld\n", data->cycle);
+		browse_process(data);
+		if (cycle_local >= data->cycle_to_die)
+			if (cycle_to_die(data, &cycle_local))
 				break ;
+		if (data->visu)
+			loop_corewar(data, cycle_local);
 	}
-	if (arena_data->cycle == arena_data->dump)
-		ft_hexdump(arena_data->arena, MEM_SIZE);
-	if (arena_data->living_process != 0)
-		clean_list(arena_data->pchain);
+	if (data->cycle == data->dump + 1)
+		ft_hexdump(data->arena, MEM_SIZE);
+	if (data->living_process != 0)
+		clean_list(data->pchain);
 }

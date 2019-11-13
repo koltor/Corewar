@@ -3,32 +3,25 @@
 /*                                                              /             */
 /*   aritmetical_addition.c                           .::    .:/ .      .::   */
 /*                                                 +:+:+   +:    +:  +:+:+    */
-/*   By: matheme <matheme@student.le-101.fr>        +:+   +:    +:    +:+     */
+/*   By: kgrosjea <kgrosjea@student.le-101.fr>      +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/10/07 11:06:51 by matheme      #+#   ##    ##    #+#       */
-/*   Updated: 2019/10/14 12:56:11 by matheme     ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/13 13:35:13 by kgrosjea    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
 
 #include "corewar.h"
 
-void	aritmetical_addition(t_process *process, t_data *arena_data, int verbos)
+void	aritmetical_addition(t_process *proc, t_data *data, int verbose)
 {
-	char ocp;
-	char r[3];
-
-	ft_memcpy(&ocp, &arena_data->arena[process->pc + 1], 1);
-	ft_memcpy(&r[0], &arena_data->arena[process->pc + 2], 1);
-	ft_memcpy(&r[1], &arena_data->arena[process->pc + 3], 1);
-	ft_memcpy(&r[2], &arena_data->arena[process->pc + 4], 1);
-	if (r[0] <= 0 || r[1] <= 0 || r[2] <= 0 || r[0] >= 17 || r[1] >= 17 || r[2] >= 17)
+	get_params(data, proc);
+	if (!compute_params(data, proc))
 		return ;
-	process->reg[r[2] - 1] = process->reg[r[1] - 1] + process->reg[r[0] - 1];
-	if (process->reg[r[2] - 1] == 0)
-		process->carry = 1;
-	else
-		process->carry = 0;
-	if (verbos & VERBOSE_SHOW_OPERATIONS)
-		FP("P%5d | add r%hhd r%hhd r%hhd\n", process->id, r[0], r[1], r[2]);
+	proc->reg[proc->param[2] - 1] =
+		(proc->param_value[0] + proc->param_value[1]) % IDX_MOD;
+	proc->carry = proc->reg[proc->param[2] - 1] == 0 ? 1 : 0;
+	if (verbose & VERBOSE_SHOW_OPERATIONS)
+		dprintf(1, "P %4d | add r%hhd r%hhd r%hhd\n", proc->id,
+			(char)proc->param[0], (char)proc->param[1], (char)proc->param[2]);
 }

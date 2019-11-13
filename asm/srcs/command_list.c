@@ -6,7 +6,7 @@
 /*   By: kgrosjea <kgrosjea@student.le-101.fr>      +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/10/03 18:19:38 by kgrosjea     #+#   ##    ##    #+#       */
-/*   Updated: 2019/10/08 17:18:23 by kgrosjea    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/10/14 16:44:37 by kgrosjea    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -38,7 +38,8 @@ t_command	*next_command(t_command **curr_command)
 {
 	if (!(*curr_command)->next_command)
 	{
-		if (!((*curr_command)->next_command = (t_command *)malloc(sizeof(t_command))))
+		if (!((*curr_command)->next_command =
+		(t_command *)malloc(sizeof(t_command))))
 			return (NULL);
 		bzero((*curr_command)->next_command, sizeof(t_command));
 	}

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                          LE - /            */
 /*                                                              /             */
-/*   h_browse_process.c                               .::    .:/ .      .::   */
+/*   browse_process.c                                 .::    .:/ .      .::   */
 /*                                                 +:+:+   +:    +:  +:+:+    */
 /*   By: matheme <matheme@student.le-101.fr>        +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/10/03 11:55:14 by ocrossi      #+#   ##    ##    #+#       */
-/*   Updated: 2019/10/15 12:46:12 by matheme     ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/13 16:42:06 by matheme     ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -39,7 +39,7 @@ static void		*get_funtion_to_execute(unsigned char opc_curr)
 		&aff
 	};
 
-	if (opc_curr >= 0x01 || opc_curr <= 0x10)
+	if (opc_curr >= 0x01 && opc_curr <= 0x10)
 		return (p[opc_curr - 1]);
 	return (NULL);
 }
@@ -49,31 +49,35 @@ static void		*get_funtion_to_execute(unsigned char opc_curr)
 ** appelant
 */
 
-static void		exec_instr(t_process *process, t_data *arena_data)
+static void		exec_instr(t_process *process, t_data *data)
 {
 	void (*f)(t_process*, t_data*, int);
 
 	f = get_funtion_to_execute(process->opc_curr);
 	if (f != NULL)
 	{
-		process->to_move = true;
-		f(process, arena_data, arena_data->verbose);
+		affect_new_ocp(process, data);
+		if (process->valid_ocp != true)
+			return ;
+		f(process, data, data->verbose);
+		play_sound(process->opc_curr);
 	}
 }
 
-void			browse_process(t_data *arena_data)
+void			browse_process(t_data *data)
 {
-	t_list *begin;
+	t_list		*begin;
 
-	begin = arena_data->pchain;
+	begin = data->pchain;
 	while (begin)
 	{
-		if (((t_process *)(begin->content))->cycle != 0)
-			((t_process *)(begin->content))->cycle--;
-		if (((t_process *)(begin->content))->cycle == 0)
+		if (((t_process*)begin->content)->cycle == 0)
+			affect_new_opc(((t_process*)begin->content), data);
+		((t_process*)begin->content)->cycle--;
+		if (((t_process*)begin->content)->cycle == 0)
 		{
-			exec_instr(begin->content, arena_data);
-			process_move(begin->content, arena_data, arena_data->verbose);
+			exec_instr(begin->content, data);
+			process_move(begin->content, data, data->verbose);
 		}
 		begin = begin->next;
 	}

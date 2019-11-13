@@ -6,112 +6,106 @@
 /*   By: kgrosjea <kgrosjea@student.le-101.fr>      +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/10/04 16:48:28 by kgrosjea     #+#   ##    ##    #+#       */
-/*   Updated: 2019/10/12 15:46:19 by kgrosjea    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/13 17:11:59 by kgrosjea    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
 
 #include "asm.h"
 
-static char	*parse_label(const char *str, t_champ **champ)
+static void	parse_label(t_data **data, t_command **command)
 {
-	t_command	*curr_command;
-	char		*rest;
+	char		*tmp;
 	int			i;
 
-	curr_command = NULL;
-	rest = NULL;
+	tmp = NULL;
 	i = 0;
-	if (!(curr_command = last_command(champ)))
-		error_exit(strerror(errno));
-	while (str[i] && ft_strctn(LABEL_CHARS, str[i]))
+	while ((*data)->line[i] && ft_strctn(LABEL_CHARS, (*data)->line[i]))
 		i++;
-	if (i > 0 && str[i] == LABEL_CHAR)
+	if (i > 0 && (*data)->line[i] == LABEL_CHAR)
 	{
-		if ((curr_command->label || curr_command->op) &&
-			!(curr_command = next_command(&curr_command)))
-			error_exit(strerror(errno));
-		if (!(curr_command->label = ft_strsub(str, 0, i)))
-			error_exit(strerror(errno));
+		if (((*command)->label || (*command)->op) &&
+			!((*command) = next_command(command)))
+			error_exit(strerror(errno), data);
+		if (!((*command)->label = ft_strsub((*data)->line, 0, i)))
+			error_exit(strerror(errno), data);
 		i++;
-		if (!(rest = ft_strsub(str, i, strlen(str) - i)))
-			error_exit(strerror(errno));
-		return (ft_strtrim(rest));
+		if (!(tmp = ft_strsub((*data)->line, i, ft_strlen((*data)->line) - i)))
+			error_exit(strerror(errno), data);
+		ft_strdel(&((*data)->line));
+		(*data)->line = ft_strtrim_f(tmp);
 	}
-	return (ft_strtrim(str));
 }
 
-static char	*parse_op(const char *str, t_champ **champ)
+static void	parse_op(t_data **data, t_command **command)
 {
-	t_command	*curr_command;
-	char		*rest;
+	char		*tmp;
 	int			i;
 
-	curr_command = NULL;
-	rest = NULL;
+	tmp = NULL;
 	i = 0;
-	if (!(curr_command = last_command(champ)))
-		error_exit(strerror(errno));
-	while (str[i] && !ft_strctn("\t ", str[i]))
+	while ((*data)->line[i] && !ft_isspace((*data)->line[i]) &&
+		(*data)->line[i] != DIRECT_CHAR)
 		i++;
-	if (!(rest = ft_strsub(str, 0, i)))
-		error_exit(strerror(errno));
-	if (op_exist(rest))
+	if (!(tmp = ft_strsub((*data)->line, 0, i)))
+		error_exit(strerror(errno), data);
+	if (op_exist(tmp))
 	{
-		if (curr_command->op &&
-			!(curr_command = next_command(&curr_command)))
-			error_exit(strerror(errno));
-		curr_command->op = ft_strdup(rest);
-		i++;
-		rest = ft_strsub(str, i, strlen(str) - i);
-		return (ft_strtrim(rest));
+		if ((*command)->op && !((*command) = next_command(command)))
+			error_exit(strerror(errno), data);
+		(*command)->op = tmp;
+		if (!(tmp = ft_strsub((*data)->line, i, ft_strlen((*data)->line) - i)))
+			error_exit(strerror(errno), data);
+		ft_strdel(&((*data)->line));
+		(*data)->line = ft_strtrim_f(tmp);
 	}
-	return (ft_strtrim(str));
+	else
+	{
+		ft_strdel(&tmp);
+		error_exit(ft_sprintf("Syntax error : %s", (*data)->line), data);
+	}
 }
 
-static void	parse_params(const char *str, t_champ **champ)
+static void	parse_params(t_data **data, t_command **command)
 {
-	t_command	*curr_command;
 	char		**tab;
 	int			i;
 
-	curr_command = NULL;
 	tab = NULL;
 	i = 0;
-	if (!(curr_command = last_command(champ)))
-		error_exit(strerror(errno));
-	if (count_char(str, SEPARATOR_CHAR) == op_param_count(curr_command->op) - 1)
-	{
-		if (!(tab = str_multisplit(str, "\t ,")))
-			error_exit(strerror(errno));
-	}
-	if (!(curr_command->params = new_params(tab_length((void **)tab))))
-		error_exit(strerror(errno));
+	if ((count_char((*data)->line, SEPARATOR_CHAR) !=
+		op_param_count((*command)->op) - 1) ||
+		!(tab = ft_strsplit((*data)->line, ',')))
+		error_exit(ft_sprintf("Invalid parameter count for instruction %s",
+			(*command)->op), data);
+	if (!((*command)->params = new_params(tab_length((void **)tab))))
+		error_exit(strerror(errno), data);
 	while (tab[i])
 	{
-		if (!(curr_command->params[i]->str = ft_strdup(tab[i])))
-			error_exit(strerror(errno));
+		if (!((*command)->params[i]->str = ft_strtrim_f(tab[i])))
+			error_exit(strerror(errno), data);
 		i++;
 	}
-
+	ft_memdel((void **)&tab);
 }
 
-void		parse_command(char const *str, t_champ **champ, int line_number)
+void		parse_command(t_data **data)
 {
-	char	*str_rest;
+	t_command	*command;
 
-	str_rest = NULL;
-	if (!(*champ)->name || !(*champ)->comment)
-		error_exit("Syntax error at token");
-	if (!ft_strctn(LABEL_CHARS, str[0]))
-	{
-		printf("Lexical error at [%d:1]\n", line_number);
-		error_exit(NULL);
-	}
-	if (!(str_rest = parse_label(str, champ)))
-		error_exit("Label parsing error");
-	if (strlen(str_rest) > 0 && !(str_rest = parse_op(str_rest, champ)))
-		error_exit("op");
-	if (strlen(str_rest) > 0)
-		parse_params(str_rest, champ);
+	command = NULL;
+	if (!(*data)->champ->name || !(*data)->champ->comment)
+		error_exit(ft_sprintf("Name and/or Comment aren't defined at the top \
+of the file"), data);
+	if (!ft_strctn(LABEL_CHARS, (*data)->line[0]))
+		error_exit(ft_sprintf("Lexical error : %s", (*data)->line), data);
+	if (!(command = last_command(&((*data)->champ))))
+		error_exit(strerror(errno), data);
+	parse_label(data, &command);
+	if (ft_strlen((*data)->line) > 0)
+		parse_op(data, &command);
+	if (ft_strlen((*data)->line) > 0)
+		parse_params(data, &command);
+	else if (command->op)
+		error_exit(ft_sprintf("No params for op : %s", command->op), data);
 }

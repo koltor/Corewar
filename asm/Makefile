@@ -6,17 +6,17 @@
 #    By: kgrosjea <kgrosjea@student.le-101.fr>      +:+   +:    +:    +:+      #
 #                                                  #+#   #+    #+    #+#       #
 #    Created: 2018/10/17 11:23:06 by kgrosjea     #+#   ##    ##    #+#        #
-#    Updated: 2019/10/11 15:52:57 by kgrosjea    ###    #+. /#+    ###.fr      #
+#    Updated: 2019/11/13 17:28:23 by kgrosjea    ###    #+. /#+    ###.fr      #
 #                                                          /                   #
 #                                                         /                    #
 # **************************************************************************** #
 
 #__________CONFIG__________#
 
-NAME		=	my_asm
+NAME		=	asm
 
 CC			=	gcc
-CFLAGS		=	-Wall -Wextra -Werror
+CFLAGS		=	-Wall -Wextra -Werror -g
 
 LIB_FLAGS	=	-L$(LIB_PATH) $(LIB_FLAG)
 INC_PREF	=	-I
@@ -31,7 +31,7 @@ INC			=	./includes/			\
 SRC			=	main.c				\
 				command_list.c		\
 				parse_command.c		\
-				parse_file.c		\
+				parse_line.c		\
 				compute_champ.c		\
 				compute_param.c		\
 				write_to_cor.c		\
@@ -39,14 +39,15 @@ SRC			=	main.c				\
 				new_struct.c		\
 				op.c				\
 				utils.c				\
-				ft_unsigned_int_reverse_octet.c	\
-				ft_unsigned_short_reverse_octet.c	\
 				str_multisplit.c	\
+				label_utils.c		\
+				free_structs.c		\
+				fix.c				\
 
 BIN			=	$(SRC:.c=.o)
 
 LIB_FLAG			=	-lft
-LIB					=	libft.a		\
+LIB					=	libft.a		
 
 SRCS		=	$(addprefix $(SRC_PATH), $(SRC))
 BINS		=	$(addprefix $(BIN_PATH), $(BIN))
@@ -97,7 +98,7 @@ re: fclean all
 
 norm:
 
-	@norminette -R CheckForbiddenSourceHeader ./srcs/ ./includes/
+	@norminette -R CheckForbiddenSourceHeader ./srcs/ ./includes/ ./libft/
 
 debug:
 
@@ -106,7 +107,3 @@ debug:
 noflag:
 
 	@echo "\n${B}[COMPILING WITH NO FLAGS]" && make re CFLAGS=''
-
-list:
-
-	@ar -t libftprintf.a

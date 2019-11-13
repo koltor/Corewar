@@ -3,58 +3,63 @@
 /*                                                              /             */
 /*   ft_itoa.c                                        .::    .:/ .      .::   */
 /*                                                 +:+:+   +:    +:  +:+:+    */
-/*   By: matheme <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
+/*   By: kgrosjea <kgrosjea@student.le-101.fr>      +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
-/*   Created: 2018/10/08 16:35:21 by matheme      #+#   ##    ##    #+#       */
-/*   Updated: 2018/10/09 15:35:39 by matheme     ###    #+. /#+    ###.fr     */
+/*   Created: 2018/10/05 20:18:33 by kgrosjea     #+#   ##    ##    #+#       */
+/*   Updated: 2018/11/12 14:00:57 by kgrosjea    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static	char	*ft_malloc_itoa(int n)
+static unsigned int	get_int_l(long n)
 {
-	char	*str;
-	int		t;
+	unsigned int	l;
 
-	t = 1;
-	if (n < 0)
-		t++;
-	else
-		n = -n;
-	while (n <= -10)
+	l = 0;
+	while (n > 0)
 	{
-		n = n / 10;
-		t += 1;
+		l++;
+		n /= 10;
 	}
-	str = (char*)malloc(sizeof(char) * (t + 1));
-	return (str);
+	return (l);
 }
 
-char			*ft_itoa(int n)
+static char			*ft_stringzero(void)
 {
-	char	*str;
-	int		t;
-	int		i;
+	char *strzero;
 
-	str = ft_malloc_itoa(n);
-	if (str == NULL)
+	if (!(strzero = ft_strnew(1)))
 		return (NULL);
-	i = 0;
-	t = 1;
-	if (n < 0)
-		str[i++] = '-';
-	else
-		n = -n;
-	while (n / t <= -10)
-		t *= 10;
-	while (t >= 1)
+	*strzero = '0';
+	return (strzero);
+}
+
+char				*ft_itoa(int n)
+{
+	char			*s;
+	unsigned int	l;
+	long			tmp;
+
+	l = 0;
+	tmp = (long)n;
+	if (tmp == 0)
+		return (ft_stringzero());
+	if (tmp < 0)
 	{
-		str[i++] = (-(n / t - '0'));
-		n = n % t;
-		t /= 10;
+		l++;
+		tmp = -tmp;
 	}
-	str[i] = '\0';
-	return (str);
+	l += get_int_l(tmp);
+	if (!(s = ft_strnew(l)))
+		return (NULL);
+	while (l-- && tmp > 0)
+	{
+		*(s + l) = (char)(tmp % 10) + '0';
+		tmp = tmp / 10;
+	}
+	if (n < 0)
+		*s = '-';
+	return (s);
 }

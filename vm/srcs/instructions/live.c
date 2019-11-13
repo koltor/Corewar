@@ -3,43 +3,44 @@
 /*                                                              /             */
 /*   live.c                                           .::    .:/ .      .::   */
 /*                                                 +:+:+   +:    +:  +:+:+    */
-/*   By: matheme <matheme@student.le-101.fr>        +:+   +:    +:    +:+     */
+/*   By: kgrosjea <kgrosjea@student.le-101.fr>      +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/10/07 11:02:43 by matheme      #+#   ##    ##    #+#       */
-/*   Updated: 2019/10/15 13:41:49 by matheme     ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/13 15:06:43 by kgrosjea    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
 
 #include "corewar.h"
 
-static unsigned int	is_there(unsigned int value, unsigned int *tab)
+static int	is_there(unsigned int value, unsigned int *tab, int max_p)
 {
 	int i;
 
 	i = -1;
-	while (++i < MAX_PLAYERS)
+	while (++i < max_p)
 		if (tab[i] == value)
 			return (i);
 	return (-1);
 }
 
-void		live(t_process *process, t_data *arena_data, int verbose)
+void		live(t_process *proc, t_data *data, int verbose)
 {
-	unsigned int	params;
-	unsigned int	idx;
+	int idx;
 
-	ft_memcpy(&params, &arena_data->arena[process->pc + 1], 4);
-	params = unsigned_int_reverse_octet(params);
-	process->is_alive = 1;
-	arena_data->nb_live += 1;
+	get_params(data, proc);
+	proc->param_value[0] = (int)unsigned_int_reverse_octet(proc->param[0]);
+	proc->is_alive = 1;
+	data->nb_live += 1;
+	proc->last_live = data->cycle;
 	if (verbose & VERBOSE_SHOW_OPERATIONS)
-		FP("P%5d | live %u\n", process->id, params);
-	if ((idx = is_there(params, arena_data->n)) != -1)
+		dprintf(1, "P %4d | live %d\n", proc->id, proc->param_value[0]);
+	if ((idx = is_there(proc->param_value[0], data->n, data->nb_champ)) != -1)
 	{
-		arena_data->last_player_alive = idx;
+		data->last_player_alive = idx;
+		data->visu ? set_live_visu(idx + 1) : 0;
 		if (verbose & VERBOSE_SHOW_LIVES)
-			FP("Player %d (%s) is said to be alive\n", idx + 1,
-			arena_data->champs_data[idx].prog_name);
+			dprintf(1, "Player %d (%s) is said to be alive\n", idx + 1,
+			data->champs_data[idx].prog_name);
 	}
 }

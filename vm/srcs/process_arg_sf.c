@@ -6,7 +6,7 @@
 /*   By: matheme <matheme@student.le-101.fr>        +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/09/27 13:28:58 by matheme      #+#   ##    ##    #+#       */
-/*   Updated: 2019/10/15 14:46:46 by matheme     ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/10/22 16:54:49 by matheme     ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -56,8 +56,9 @@ void		get_value_for(char *str, t_option *data)
 ** modifie: l'expected_arg
 */
 
-static void	ft_listing_option(char c, char *expected_arg)
+static void	ft_listing_option(char c, char *expected_arg, t_bool *visu)
 {
+	c == 'g' ? *visu = true : 0;
 	c == 'v' ? *expected_arg = 3 : 0;
 	c == 'd' ? *expected_arg = 2 : 0;
 	c == 'n' ? *expected_arg = 1 : 0;
@@ -82,7 +83,7 @@ void		get_option(char *str, t_option *arg_data)
 			arg_data->expected_arg = -1;
 			break ;
 		}
-		ft_listing_option(str[i], &arg_data->expected_arg);
+		ft_listing_option(str[i], &arg_data->expected_arg, &arg_data->visu);
 		i++;
 	}
 }

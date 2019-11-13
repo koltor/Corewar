@@ -1,8 +1,0 @@
-echo "file name ? (whithout extension)"
-read file_name
-./my_asm ../ressources/champs/$file_name.s
-hexdump -C ../ressources/champs/$file_name.cor > my_cor
-../ressources/asm ../ressources/champs/$file_name.s
-hexdump -C ../ressources/champs/$file_name.cor > orig_cor
-diff my_cor orig_cor > diff.txt
-cat diff.txt

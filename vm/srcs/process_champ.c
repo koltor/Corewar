@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                          LE - /            */
 /*                                                              /             */
-/*   d_process_champ.c                                .::    .:/ .      .::   */
+/*   process_champ.c                                  .::    .:/ .      .::   */
 /*                                                 +:+:+   +:    +:  +:+:+    */
 /*   By: matheme <matheme@student.le-101.fr>        +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/09/30 10:12:48 by matheme      #+#   ##    ##    #+#       */
-/*   Updated: 2019/10/15 13:50:44 by matheme     ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/08 18:44:35 by matheme     ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -69,7 +69,8 @@ static int	check_data_of_champ(t_header header, int file_len)
 		return (ERR_FILE_MAGIC);
 	if (header.prog_size > CHAMP_MAX_SIZE)
 		return (ERR_FILE_SIZE);
-	if (header.prog_size != file_len - 16 - PROG_NAME_LENGTH - COMMENT_LENGTH)
+	if (header.prog_size !=
+		(unsigned int)(file_len - 16 - PROG_NAME_LENGTH - COMMENT_LENGTH))
 		return (ERR_FILE_CORRUPT);
 	return (0);
 }

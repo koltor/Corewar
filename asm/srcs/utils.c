@@ -6,39 +6,22 @@
 /*   By: kgrosjea <kgrosjea@student.le-101.fr>      +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/10/03 11:41:35 by kgrosjea     #+#   ##    ##    #+#       */
-/*   Updated: 2019/10/12 15:46:18 by kgrosjea    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/10/31 13:15:46 by kgrosjea    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
 
 #include "asm.h"
 
-t_bool	label_exists(char *str, t_command *command_list)
+char	*param_type(int arg_type)
 {
-	t_command *curr_command;
-
-	curr_command = command_list;
-	while (curr_command)
-	{
-		if (curr_command->label && !strcmp(str, curr_command->label))
-			return (TRUE);
-		curr_command = curr_command->next_command;
-	}
-	return (FALSE);
-}
-
-int		label_index(char *label, t_champ *champ)
-{
-	t_command *command;
-
-	command = champ->command_list;
-	while (command)
-	{
-		if (command->label && !strcmp(label, command->label))
-			return (command->index);
-		command = command->next_command; 
-	}
-	return (0);
+	if (arg_type == T_REG)
+		return ("register");
+	else if (arg_type == T_DIR)
+		return ("direct");
+	else if (arg_type == T_IND)
+		return ("indirect");
+	return ("unknown");
 }
 
 int		tab_length(void **tab)
@@ -51,14 +34,18 @@ int		tab_length(void **tab)
 	return (i);
 }
 
-int		error_exit(char *error_str)
+int		error_exit(char *error_str, t_data **data)
 {
+	get_next_line((*data)->fd, NULL);
+	if (*data)
+		free_data(data);
 	if (error_str)
-		printf("%s\n", error_str);
+		ft_printf("%s\n", error_str);
+	ft_strdel(&error_str);
 	exit(1);
 }
 
-t_bool str_only_ctn(const char *str, const char *ctn)
+t_bool	str_only_ctn(const char *str, const char *ctn)
 {
 	while (*str)
 	{
@@ -67,17 +54,6 @@ t_bool str_only_ctn(const char *str, const char *ctn)
 		str++;
 	}
 	return (TRUE);
-}
-
-t_bool	ft_strctn(const char *str, char c)
-{
-	while (*str)
-	{
-		if (*str == c)
-			return (TRUE);
-		str++;
-	}
-	return (FALSE);
 }
 
 int		count_char(const char *str, char c)

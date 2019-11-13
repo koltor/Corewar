@@ -3,36 +3,60 @@
 /*                                                              /             */
 /*   short_fork.c                                     .::    .:/ .      .::   */
 /*                                                 +:+:+   +:    +:  +:+:+    */
-/*   By: matheme <matheme@student.le-101.fr>        +:+   +:    +:    +:+     */
+/*   By: kgrosjea <kgrosjea@student.le-101.fr>      +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/10/07 11:12:19 by matheme      #+#   ##    ##    #+#       */
-/*   Updated: 2019/10/14 12:26:51 by matheme     ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/13 15:08:18 by kgrosjea    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
 
 #include "corewar.h"
 
-void	short_fork(t_process *proc, t_data *arena_data, int verbose)
+int		get_cycle_forks(int opc_value)
 {
-	char		r[2];
-	short		new_link_pc;
-	t_process	*fork;
+	if (opc_value <= 0x10 && opc_value >= 0x01)
+		return (g_op_tab[opc_value - 1].cycles);
+	return (0);
+}
+
+t_list	*copy_process(t_data *data, t_process *proc, int bv)
+{
+	int			pc;
+	t_process	fork;
 	t_list		*new_link;
 
-	if (!(new_link = ft_lstnew(fork, sizeof(proc))))
-		return ;
-	ft_bzero(new_link->content, sizeof(proc)); // yes le bzero de la winnnnnnnnnn!!!!!!!!!!!!!!!!!!!!!!!!!
-	ft_lstadd(&arena_data->pchain, new_link);
-	ft_memmove(&r[0], &arena_data->arena[proc->pc + 1], 1);
-	ft_memmove(&r[1], &arena_data->arena[proc->pc + 2], 1);
-	new_link_pc = r[1] + r[0];
-	ft_memmove(new_link->content, proc, sizeof(proc));
-	arena_data->living_process++;
-	((t_process *)(new_link->content))->id = ++arena_data->ids_process;
-	((t_process *)(new_link->content))->pc = (proc->pc + (new_link_pc % IDX_MOD)) % MEM_SIZE;
-	tester_1_lst(arena_data->pchain);
+	ft_bzero(&fork, sizeof(t_process));
+	if (!(new_link = ft_lstnew(&fork, sizeof(t_process))))
+	{
+		f_error(0);
+		return (NULL);
+	}
+	ft_memmove(new_link->content, proc, sizeof(t_process));
+	pc = (bv == 0) ? (proc->pc + (proc->param[0] % IDX_MOD)) % MEM_SIZE :
+						(proc->pc + proc->param[0]) % MEM_SIZE;
+	if (pc < 0)
+		pc = MEM_SIZE - pc;
+	((t_process *)(new_link->content))->pc = pc;
+	data->living_process++;
+	data->ids_process++;
+	((t_process *)(new_link->content))->id = data->ids_process;
+	((t_process *)(new_link->content))->opc_curr = data->arena[pc];
+	((t_process *)(new_link->content))->ocp_curr =
+				data->arena[(pc + 1) % MEM_SIZE];
+	return (new_link);
+}
+
+void	short_fork(t_process *proc, t_data *data, int verbose)
+{
+	t_list	*new_link;
+
+	transfer_in_proc(data, proc, 0, ((proc->pc + 1) % MEM_SIZE));
+	new_link = copy_process(data, proc, 0);
+	ft_lstadd(&(data->pchain), new_link);
 	if (verbose & VERBOSE_SHOW_OPERATIONS)
-		dprintf(1, "P%5d | fork %d (%d)\n", proc->id, new_link_pc, ((t_process *)(new_link->content))->pc);
-	tester_1_lst(arena_data->pchain);
+	{
+		dprintf(1, "P %4d | fork %d (%d)\n", proc->id, proc->param[0],
+								proc->pc + (proc->param[0] % IDX_MOD));
+	}
 }

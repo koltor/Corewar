@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                          LE - /            */
 /*                                                              /             */
-/*   b_process_arg.c                                  .::    .:/ .      .::   */
+/*   process_arg.c                                    .::    .:/ .      .::   */
 /*                                                 +:+:+   +:    +:  +:+:+    */
 /*   By: matheme <matheme@student.le-101.fr>        +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/09/30 07:52:33 by matheme      #+#   ##    ##    #+#       */
-/*   Updated: 2019/10/15 14:41:37 by matheme     ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/08 18:42:41 by matheme     ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -46,7 +46,7 @@ static int	check_error_arg(t_option arg_da)
 	if (arg_da.nb_champ > MAX_PLAYERS)
 		return (close_file(arg_da.nb_champ, arg_da.fd));
 	while (++i < arg_da.nb_champ)
-		if (arg_da.fd[i] == -1 || arg_da.n[i] == -2)
+		if (arg_da.fd[i] == -1)
 			return (close_file(arg_da.nb_champ, arg_da.fd));
 	if (i == 0)
 		return (close_file(arg_da.nb_champ, arg_da.fd));
@@ -75,7 +75,7 @@ static char	get_instruct_code(char expected_arg, char *str)
 	}
 	if (expected_arg == 1 || expected_arg == 2 || expected_arg == 3)
 	{
-		if ((*str < '0' || *str > '9') && *str != '+' && *str != '-')
+		if (((*str < '0' || *str > '9') && *str != '+') || *str == '-')
 			return (INSTRUCT_CODE_ERROR);
 		return (RECUPERE_VALEURS);
 	}
@@ -96,7 +96,7 @@ static char	get_instruct_code(char expected_arg, char *str)
 
 static void	process_arg_cycle(t_option *arg_data, int ac, char **av)
 {
-	char		instruct_code;
+	int			instruct_code;
 	static void	(*p[3])(char*, t_option*) = {
 		&get_champ, &get_option, &get_value_for
 	};
