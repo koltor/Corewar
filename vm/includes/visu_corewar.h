@@ -6,7 +6,7 @@
 /*   By: matheme <matheme@student.le-101.fr>        +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/10/21 14:14:54 by matheme      #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/14 17:21:24 by matheme     ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/15 17:13:24 by matheme     ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -56,6 +56,7 @@ typedef struct	s_env
 	int					champ_live[MAX_PLAYERS + 1];
 	char				foot_print[MEM_SIZE];
 	Mix_Chunk			*sound[16];
+	t_bool				forced_to_quit;
 }				t_env;
 
 t_env			*g_env(t_env *env_src);
@@ -66,9 +67,11 @@ void			visu_interface(t_data *data, unsigned long cycle_local);
 void			print_arena(t_data *data);
 void			live_bar(t_data *data);
 void			intro(void);
-void			sdl_loop(unsigned long time, t_data *data,
+char			sdl_loop(unsigned long time, t_data *data,
 											unsigned long cycle_local);
-void			loop_corewar(t_data *data, unsigned long cycle_local);
+t_bool			loop_corewar(t_data *data, unsigned long cycle_local);
+void			show_the_winner(t_data *data, unsigned long cycle_local);
+void			print_variable(t_data *data, unsigned long cycle_local);
 void			quit_sdl();
 void			init_arena();
 void			print_value(int value, SDL_Rect *rect, SDL_Color color,
@@ -85,11 +88,13 @@ void			info_process(int x, int y, t_data *data,
 void			process_present(t_list *begin, unsigned int pos_process);
 void			show_metadata_process(t_process *process);
 void			show_metadata_process2(t_process *process);
-void			show_metadata_process_title(t_process *process);
+void			show_metadata_process_title(void);
 void			set_live_visu_bzero();
 void			set_live_visu(char id);
 
+int				my_rand(int value);
 void			sound_bank_init(void);
 void			play_music(void);
 void			play_sound(char opc);
+t_bool			check_visu_ressource(void);
 #endif

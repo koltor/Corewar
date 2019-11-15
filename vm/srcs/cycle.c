@@ -6,7 +6,7 @@
 /*   By: matheme <matheme@student.le-101.fr>        +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/10/07 09:58:46 by matheme      #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/14 17:09:51 by matheme     ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/15 15:03:14 by matheme     ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -53,8 +53,8 @@ static t_bool	cycle_to_die(t_data *data, long *l_cycle)
 	data->nb_live = 0;
 	data->visu ? set_live_visu_bzero() : 0;
 	if (data->living_process == 0)
-		return (true);
-	return (false);
+		return (TRUE);
+	return (FALSE);
 }
 
 /*
@@ -78,11 +78,12 @@ void			cycle(t_data *data)
 		if (cycle_local >= data->cycle_to_die)
 			if (cycle_to_die(data, &cycle_local))
 				break ;
-		if (data->visu)
-			loop_corewar(data, cycle_local);
+		if (data->visu && !loop_corewar(data, cycle_local))
+			break ;
 	}
 	if (data->cycle == data->dump + 1)
 		ft_hexdump(data->arena, MEM_SIZE);
 	if (data->living_process != 0)
 		clean_list(data->pchain);
+	data->visu ? show_the_winner(data, cycle_local) : 0;
 }

@@ -6,7 +6,7 @@
 /*   By: matheme <matheme@student.le-101.fr>        +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/09/26 11:46:08 by matheme      #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/14 17:23:48 by matheme     ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/15 17:16:10 by matheme     ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -103,14 +103,15 @@ int			main(int ac, char **av)
 
 	process_arg(&arg_data, ac - 1, &av[1]);
 	set_data(&data, arg_data);
-	intro_player(data.champs_data, data.nb_champ);
-	dump_zero(data);
 	if (data.visu && !init_sdl(av[0]))
 	{
 		clean_list(data.pchain);
-		return (1);
+		f_error(4);
+		return (0);
 	}
 	data.visu ? init_foot_print(&data) : 0;
+	intro_player(data.champs_data, data.nb_champ);
+	dump_zero(data);
 	cycle(&data);
 	print_the_winner(data);
 	if (data.visu)

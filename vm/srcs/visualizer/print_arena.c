@@ -3,10 +3,10 @@
 /*                                                              /             */
 /*   print_arena.c                                    .::    .:/ .      .::   */
 /*                                                 +:+:+   +:    +:  +:+:+    */
-/*   By: kgrosjea <kgrosjea@student.le-101.fr>      +:+   +:    +:    +:+     */
+/*   By: matheme <matheme@student.le-101.fr>        +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/10/23 19:46:48 by matheme      #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/13 13:34:45 by kgrosjea    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/15 16:23:00 by matheme     ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -50,7 +50,8 @@ void		print_arena(t_data *data)
 	i = 0;
 	while (i < MEM_SIZE)
 	{
-		SDL_FillRect(env->screen, &env->arena.rect[i], clr[env->foot_print[i]]);
+		SDL_FillRect(env->screen, &env->arena.rect[i],
+								clr[(int)env->foot_print[i]]);
 		print_text_arena(data, i, env->arena.rect[i]);
 		i++;
 	}

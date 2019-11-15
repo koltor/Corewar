@@ -6,7 +6,7 @@
 /*   By: kgrosjea <kgrosjea@student.le-101.fr>      +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/10/03 11:55:14 by ocrossi      #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/14 16:23:07 by kgrosjea    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/15 12:49:05 by kgrosjea    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -57,7 +57,7 @@ static void		exec_instr(t_process *process, t_data *data)
 	if (f != NULL)
 	{
 		affect_new_ocp(process, data);
-		if (process->valid_ocp != true)
+		if (process->valid_ocp != TRUE)
 			return ;
 		f(process, data, data->verbose);
 		if (data->visu)

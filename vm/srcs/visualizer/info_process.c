@@ -6,7 +6,7 @@
 /*   By: matheme <matheme@student.le-101.fr>        +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/11/13 09:37:23 by matheme      #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/13 10:23:09 by matheme     ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/15 16:27:00 by matheme     ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -44,7 +44,7 @@ static void		show_registre_process(t_process *process)
 
 void			process_present(t_list *begin, unsigned int pos_process)
 {
-	show_metadata_process_title(((t_process*)(begin->content)));
+	show_metadata_process_title();
 	while (begin)
 	{
 		if (((t_process*)(begin->content))->pc == pos_process)

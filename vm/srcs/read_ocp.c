@@ -6,7 +6,7 @@
 /*   By: kgrosjea <kgrosjea@student.le-101.fr>      +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/11/08 17:50:15 by matheme      #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/13 13:57:25 by kgrosjea    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/15 12:49:15 by kgrosjea    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -79,10 +79,10 @@ static t_bool	check_valid_ocp(char ocp, char opc)
 		ret = get_param_type(ocp, i);
 		ret = (ret == 3) ? 4 : ret;
 		if (!(ret & g_op_tab[opc - 1].param_type[i - 1]))
-			return (false);
+			return (FALSE);
 		i++;
 	}
-	return (true);
+	return (TRUE);
 }
 
 void			read_ocp(t_process *proc)

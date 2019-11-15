@@ -3,10 +3,10 @@
 /*                                                              /             */
 /*   process_arg_sf.c                                 .::    .:/ .      .::   */
 /*                                                 +:+:+   +:    +:  +:+:+    */
-/*   By: matheme <matheme@student.le-101.fr>        +:+   +:    +:    +:+     */
+/*   By: kgrosjea <kgrosjea@student.le-101.fr>      +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/09/27 13:28:58 by matheme      #+#   ##    ##    #+#       */
-/*   Updated: 2019/10/22 16:54:49 by matheme     ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/15 12:49:05 by kgrosjea    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -58,7 +58,7 @@ void		get_value_for(char *str, t_option *data)
 
 static void	ft_listing_option(char c, char *expected_arg, t_bool *visu)
 {
-	c == 'g' ? *visu = true : 0;
+	c == 'g' ? *visu = TRUE : 0;
 	c == 'v' ? *expected_arg = 3 : 0;
 	c == 'd' ? *expected_arg = 2 : 0;
 	c == 'n' ? *expected_arg = 1 : 0;

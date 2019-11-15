@@ -6,7 +6,7 @@
 /*   By: kgrosjea <kgrosjea@student.le-101.fr>      +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/10/14 15:00:19 by matheme      #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/13 13:34:45 by kgrosjea    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/15 13:48:57 by kgrosjea    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -83,7 +83,7 @@ void			kill_dead_process(t_data *data)
 		if (proc->is_alive == 0 || data->cycle_to_die <= 0)
 		{
 			if (data->verbose & VERBOSE_SHOW_DEATHS)
-				FP("Process %d hasn't lived for %d cycles (CTD %d)\n",
+				FP("Process %d hasn't lived for %ld cycles (CTD %d)\n",
 				proc->id, data->cycle - proc->last_live, data->cycle_to_die);
 			kill_one_process(current, &data);
 		}

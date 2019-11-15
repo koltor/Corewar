@@ -3,10 +3,10 @@
 /*                                                              /             */
 /*   corewar.h                                        .::    .:/ .      .::   */
 /*                                                 +:+:+   +:    +:  +:+:+    */
-/*   By: matheme <matheme@student.le-101.fr>        +:+   +:    +:    +:+     */
+/*   By: kgrosjea <kgrosjea@student.le-101.fr>      +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/09/25 17:35:25 by matheme      #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/13 17:33:25 by matheme     ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/15 16:42:35 by kgrosjea    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -16,7 +16,6 @@
 
 # include "op.h"
 # include "libft.h"
-# include "ft_printf.h"
 # include <fcntl.h>
 # include <stdio.h>
 # include <unistd.h>
@@ -39,12 +38,6 @@
 /*
 ** definition des structures
 */
-
-typedef	enum	e_bool
-{
-	true = 1,
-	false = 0
-}				t_bool;
 
 typedef struct	s_op
 {
@@ -239,7 +232,8 @@ void			init_foot_print(t_data *data);
 void			print_footprint(int idx, int len, int n);
 void			set_live_visu_bzero();
 void			set_live_visu(char id);
-void			loop_corewar(t_data *data, unsigned long cycle_local);
+t_bool			loop_corewar(t_data *data, unsigned long cycle_local);
+void			show_the_winner(t_data *data, unsigned long cycle_local);
 void			quit_sdl();
 
 void			play_sound(char opc);

@@ -6,7 +6,7 @@
 /*   By: matheme <matheme@student.le-101.fr>        +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/10/21 13:49:44 by matheme      #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/13 16:36:08 by matheme     ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/15 17:14:23 by matheme     ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -80,6 +80,7 @@ static t_bool	init_env(char *path_name)
 	env->visu_path = get_exec_path(path_name);
 	env->win_size.x = WIN_SIZE_X;
 	env->win_size.y = WIN_SIZE_Y;
+	env->forced_to_quit = FALSE;
 	get_policy();
 	env->time = 1;
 	env->pause = FALSE;
@@ -99,6 +100,8 @@ t_bool			init_sdl(char *path)
 		return (FALSE);
 	g_env(&env);
 	init_env(path);
+	if (!check_visu_ressource())
+		return (FALSE);
 	play_music();
 	intro();
 	return (TRUE);

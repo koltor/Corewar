@@ -3,10 +3,10 @@
 /*                                                              /             */
 /*   compute_params.c                                 .::    .:/ .      .::   */
 /*                                                 +:+:+   +:    +:  +:+:+    */
-/*   By: kgrosjea <kgrosjea@student.le-101.fr>      +:+   +:    +:    +:+     */
+/*   By: matheme <matheme@student.le-101.fr>        +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/11/13 11:37:15 by kgrosjea     #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/13 15:04:05 by kgrosjea    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/15 16:28:13 by matheme     ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -30,7 +30,7 @@ static int		get_index(t_data *data, t_process *proc, int val)
 	return (res);
 }
 
-static t_bool	compute_registers(t_data *data, t_process *proc)
+static t_bool	compute_registers(t_process *proc)
 {
 	int i;
 
@@ -48,7 +48,7 @@ static t_bool	compute_registers(t_data *data, t_process *proc)
 	return (TRUE);
 }
 
-static void		compute_directs(t_data *data, t_process *proc)
+static void		compute_directs(t_process *proc)
 {
 	int i;
 
@@ -76,9 +76,9 @@ static void		compute_indirects(t_data *data, t_process *proc)
 
 t_bool			compute_params(t_data *data, t_process *proc)
 {
-	if (!compute_registers(data, proc))
+	if (!compute_registers(proc))
 		return (FALSE);
 	compute_indirects(data, proc);
-	compute_directs(data, proc);
+	compute_directs(proc);
 	return (TRUE);
 }
