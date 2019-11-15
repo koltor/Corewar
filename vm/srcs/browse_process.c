@@ -3,10 +3,10 @@
 /*                                                              /             */
 /*   browse_process.c                                 .::    .:/ .      .::   */
 /*                                                 +:+:+   +:    +:  +:+:+    */
-/*   By: matheme <matheme@student.le-101.fr>        +:+   +:    +:    +:+     */
+/*   By: kgrosjea <kgrosjea@student.le-101.fr>      +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/10/03 11:55:14 by ocrossi      #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/13 16:42:06 by matheme     ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/14 16:23:07 by kgrosjea    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -60,7 +60,8 @@ static void		exec_instr(t_process *process, t_data *data)
 		if (process->valid_ocp != true)
 			return ;
 		f(process, data, data->verbose);
-		play_sound(process->opc_curr);
+		if (data->visu)
+			play_sound(process->opc_curr);
 	}
 }
 

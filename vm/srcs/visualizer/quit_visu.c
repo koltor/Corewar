@@ -3,10 +3,10 @@
 /*                                                              /             */
 /*   quit_visu.c                                      .::    .:/ .      .::   */
 /*                                                 +:+:+   +:    +:  +:+:+    */
-/*   By: kgrosjea <kgrosjea@student.le-101.fr>      +:+   +:    +:    +:+     */
+/*   By: matheme <matheme@student.le-101.fr>        +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/10/23 17:43:47 by matheme      #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/11 15:46:33 by kgrosjea    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/14 17:28:51 by matheme     ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -15,10 +15,17 @@
 
 void		quit_sdl(void)
 {
-	t_env *env;
+	t_env	*env;
+	int		i;
 
 	env = NULL;
 	g_env(env);
-	SDL_DestroyWindow(env->pwindow);
+//	i = -1;
+//	free(env->visu_path);
+//	TTF_CloseFont(env->police1);
+//	TTF_CloseFont(env->police2);
+//	while (++i < 16)
+//		Mix_FreeChunk(env->sound[i]);
+//	SDL_DestroyWindow(env->pwindow);
 	SDL_Quit();
 }

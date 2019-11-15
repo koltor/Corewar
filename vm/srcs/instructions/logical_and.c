@@ -3,10 +3,10 @@
 /*                                                              /             */
 /*   logical_and.c                                    .::    .:/ .      .::   */
 /*                                                 +:+:+   +:    +:  +:+:+    */
-/*   By: kgrosjea <kgrosjea@student.le-101.fr>      +:+   +:    +:    +:+     */
+/*   By: matheme <matheme@student.le-101.fr>        +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/11/11 18:21:39 by kgrosjea     #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/13 13:34:45 by kgrosjea    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/14 17:09:51 by matheme     ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -22,6 +22,6 @@ void		logical_and(t_process *proc, t_data *data, int verbose)
 		(proc->param_value[0] & proc->param_value[1]) % IDX_MOD;
 	proc->carry = proc->reg[proc->param[2] - 1] == 0 ? 1 : 0;
 	if (verbose & VERBOSE_SHOW_OPERATIONS)
-		dprintf(1, "P %4d | and %d %d r%d\n", proc->id,
+		ft_printf("P %4d | and %d %d r%d\n", proc->id,
 			proc->param_value[0], proc->param_value[1], proc->param[2]);
 }

@@ -3,10 +3,10 @@
 /*                                                              /             */
 /*   bin_transfer.c                                   .::    .:/ .      .::   */
 /*                                                 +:+:+   +:    +:  +:+:+    */
-/*   By: kgrosjea <kgrosjea@student.le-101.fr>      +:+   +:    +:    +:+     */
+/*   By: matheme <matheme@student.le-101.fr>        +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/10/22 22:16:27 by ocrossi      #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/13 13:45:44 by kgrosjea    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/14 17:12:11 by matheme     ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -25,15 +25,15 @@ void	transfer_in_proc(t_data *data, t_process *proc, int id, int pos)
 		if (data->arena[((pos) % MEM_SIZE)] < 0)
 			proc->param[id] |= 0xFFFF << 16;
 		proc->param[id] |= ((unsigned char)data->arena[((pos) % MEM_SIZE)])
-																		<< 8;
+			<< 8;
 		proc->param[id] |= (unsigned char)data->arena[((pos + 1) % MEM_SIZE)];
 	}
 	else if (proc->size_params[id] == 4)
 	{
-		proc->param[id] |= (data->arena[((pos) % MEM_SIZE)]) << 24;
-		proc->param[id] |= (data->arena[((pos + 1) % MEM_SIZE)]) << 16;
-		proc->param[id] |= (data->arena[((pos + 2) % MEM_SIZE)]) << 8;
-		proc->param[id] |= data->arena[(pos + 3) % MEM_SIZE];
+		proc->param[id] |= data->arena[(pos + 3) % MEM_SIZE] & 0xff;
+		proc->param[id] |= data->arena[(pos + 2) % MEM_SIZE] << 8 & 0xff00;
+		proc->param[id] |= data->arena[(pos + 1) % MEM_SIZE] << 16 & 0xff0000;
+		proc->param[id] |= data->arena[(pos % MEM_SIZE)] << 24 & 0xff000000;
 	}
 }
 

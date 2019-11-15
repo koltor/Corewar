@@ -3,10 +3,10 @@
 /*                                                              /             */
 /*   short_fork.c                                     .::    .:/ .      .::   */
 /*                                                 +:+:+   +:    +:  +:+:+    */
-/*   By: kgrosjea <kgrosjea@student.le-101.fr>      +:+   +:    +:    +:+     */
+/*   By: matheme <matheme@student.le-101.fr>        +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/10/07 11:12:19 by matheme      #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/13 15:08:18 by kgrosjea    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/14 17:09:51 by matheme     ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -56,7 +56,7 @@ void	short_fork(t_process *proc, t_data *data, int verbose)
 	ft_lstadd(&(data->pchain), new_link);
 	if (verbose & VERBOSE_SHOW_OPERATIONS)
 	{
-		dprintf(1, "P %4d | fork %d (%d)\n", proc->id, proc->param[0],
+		ft_printf("P %4d | fork %d (%d)\n", proc->id, proc->param[0],
 								proc->pc + (proc->param[0] % IDX_MOD));
 	}
 }

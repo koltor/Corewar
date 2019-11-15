@@ -3,10 +3,10 @@
 /*                                                              /             */
 /*   direct_load.c                                    .::    .:/ .      .::   */
 /*                                                 +:+:+   +:    +:  +:+:+    */
-/*   By: kgrosjea <kgrosjea@student.le-101.fr>      +:+   +:    +:    +:+     */
+/*   By: matheme <matheme@student.le-101.fr>        +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/10/07 11:03:23 by matheme      #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/13 13:57:25 by kgrosjea    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/14 17:09:51 by matheme     ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -84,5 +84,5 @@ void		direct_load(t_process *process, t_data *data, int verbose)
 	process->reg[r1 - 1] = val;
 	process->carry = (val == 0) ? 1 : 0;
 	if (verbose & VERBOSE_SHOW_OPERATIONS)
-		dprintf(1, "P %4d | ld %d r%hhd\n", process->id, val, r1);
+		ft_printf("P %4d | ld %d r%hhd\n", process->id, val, r1);
 }

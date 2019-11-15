@@ -3,10 +3,10 @@
 /*                                                              /             */
 /*   direct_store.c                                   .::    .:/ .      .::   */
 /*                                                 +:+:+   +:    +:  +:+:+    */
-/*   By: kgrosjea <kgrosjea@student.le-101.fr>      +:+   +:    +:    +:+     */
+/*   By: matheme <matheme@student.le-101.fr>        +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/10/07 11:04:03 by matheme      #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/13 13:57:25 by kgrosjea    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/14 17:09:51 by matheme     ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -28,6 +28,6 @@ void	direct_store(t_process *proc, t_data *data, int verbose)
 				4, proc->id_player + 1);
 	}
 	if (verbose & VERBOSE_SHOW_OPERATIONS)
-		dprintf(1, "P %4d | st r%d %d\n", proc->id,
+		ft_printf("P %4d | st r%d %d\n", proc->id,
 			proc->param[0], proc->param[1]);
 }

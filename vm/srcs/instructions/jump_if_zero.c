@@ -3,10 +3,10 @@
 /*                                                              /             */
 /*   jump_if_zero.c                                   .::    .:/ .      .::   */
 /*                                                 +:+:+   +:    +:  +:+:+    */
-/*   By: kgrosjea <kgrosjea@student.le-101.fr>      +:+   +:    +:    +:+     */
+/*   By: matheme <matheme@student.le-101.fr>        +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/10/07 11:10:39 by matheme      #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/13 15:14:02 by kgrosjea    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/14 17:09:51 by matheme     ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -20,11 +20,11 @@ void	jump_if_zero(t_process *proc, t_data *data, int verbose)
 	{
 		proc->pc = (proc->pc + (proc->param[0] % IDX_MOD)) % MEM_SIZE;
 		if (verbose & VERBOSE_SHOW_OPERATIONS)
-			dprintf(1, "P %4d | zjmp %d OK\n", proc->id, proc->param[0]);
+			ft_printf("P %4d | zjmp %d OK\n", proc->id, proc->param[0]);
 	}
 	else
 	{
 		if (verbose & VERBOSE_SHOW_OPERATIONS)
-			dprintf(1, "P %4d | zjmp %d FAILED\n", proc->id, proc->param[0]);
+			ft_printf("P %4d | zjmp %d FAILED\n", proc->id, proc->param[0]);
 	}
 }

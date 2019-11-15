@@ -3,10 +3,10 @@
 /*                                                              /             */
 /*   print_memory.c                                   .::    .:/ .      .::   */
 /*                                                 +:+:+   +:    +:  +:+:+    */
-/*   By: kgrosjea <kgrosjea@student.le-101.fr>      +:+   +:    +:    +:+     */
+/*   By: matheme <matheme@student.le-101.fr>        +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/10/24 13:53:51 by ocrossi      #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/13 14:05:27 by kgrosjea    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/14 17:18:00 by matheme     ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -69,7 +69,6 @@ void	print_memory_binary(const void *addr, size_t size)
 		}
 		print_octet(p);
 		FP(" || ");
-		fflush(stdout);
 		p++;
 		i++;
 		size--;

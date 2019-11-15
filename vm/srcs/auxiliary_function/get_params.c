@@ -3,17 +3,17 @@
 /*                                                              /             */
 /*   get_params.c                                     .::    .:/ .      .::   */
 /*                                                 +:+:+   +:    +:  +:+:+    */
-/*   By: kgrosjea <kgrosjea@student.le-101.fr>      +:+   +:    +:    +:+     */
+/*   By: matheme <matheme@student.le-101.fr>        +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/11/13 13:48:29 by kgrosjea     #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/13 14:57:17 by kgrosjea    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/14 16:56:27 by matheme     ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
 
 #include "corewar.h"
 
-static int		op_param_count(int opc)
+static int	op_param_count(int opc)
 {
 	int i;
 
@@ -27,7 +27,7 @@ static int		op_param_count(int opc)
 	return (0);
 }
 
-t_bool	op_has_ocp(int opc)
+t_bool		op_has_ocp(int opc)
 {
 	int i;
 
@@ -41,7 +41,7 @@ t_bool	op_has_ocp(int opc)
 	return (FALSE);
 }
 
-void			get_params(t_data *data, t_process *proc)
+void		get_params(t_data *data, t_process *proc)
 {
 	int param_count;
 	int param;

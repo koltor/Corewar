@@ -3,10 +3,10 @@
 /*                                                              /             */
 /*   move_process.c                                   .::    .:/ .      .::   */
 /*                                                 +:+:+   +:    +:  +:+:+    */
-/*   By: kgrosjea <kgrosjea@student.le-101.fr>      +:+   +:    +:    +:+     */
+/*   By: matheme <matheme@student.le-101.fr>        +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/11/06 14:05:40 by ocrossi      #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/13 13:34:45 by kgrosjea    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/14 17:09:51 by matheme     ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -26,7 +26,7 @@ void		process_move(t_process *proc, t_data *data, int verbose)
 	proc->pc = (proc->pc + op_size) % MEM_SIZE;
 	if (verbose & VERBOSE_SHOW_PC_MOVEMENTS && proc->to_move == true)
 	{
-		dprintf(1, "ADV %hhd (0x%.4x -> 0x%.4x) ", op_size, old_pc,
+		ft_printf("ADV %hhd (0x%.4x -> 0x%.4x) ", op_size, old_pc,
 			old_pc + op_size);
 		print_memory_memsize(data->arena, op_size, old_pc);
 	}

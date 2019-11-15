@@ -3,10 +3,10 @@
 /*                                                              /             */
 /*   indirect_load.c                                  .::    .:/ .      .::   */
 /*                                                 +:+:+   +:    +:  +:+:+    */
-/*   By: kgrosjea <kgrosjea@student.le-101.fr>      +:+   +:    +:    +:+     */
+/*   By: matheme <matheme@student.le-101.fr>        +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/10/07 11:11:19 by matheme      #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/13 13:57:25 by kgrosjea    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/14 17:09:51 by matheme     ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -69,9 +69,9 @@ static void	print_verbose(int verbose, t_process *proc, int val[3], char r1)
 {
 	if (verbose & VERBOSE_SHOW_OPERATIONS)
 	{
-		dprintf(1, "P %4d | ldi %d %d r%hhd\n", proc->id, val[0], val[1], r1);
+		ft_printf("P %4d | ldi %d %d r%hhd\n", proc->id, val[0], val[1], r1);
 		print_space_for_indirect(proc->id);
-		dprintf(1, "| -> load from %d + %d = %d (with pc and mod %d)\n", val[0],
+		ft_printf("| -> load from %d + %d = %d (with pc and mod %d)\n", val[0],
 		val[1], val[0] + val[1],
 		(int)(proc->pc + ((val[0] + val[1]) % IDX_MOD)) % MEM_SIZE);
 	}

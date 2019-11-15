@@ -3,10 +3,10 @@
 /*                                                              /             */
 /*   cycle.c                                          .::    .:/ .      .::   */
 /*                                                 +:+:+   +:    +:  +:+:+    */
-/*   By: kgrosjea <kgrosjea@student.le-101.fr>      +:+   +:    +:    +:+     */
+/*   By: matheme <matheme@student.le-101.fr>        +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/10/07 09:58:46 by matheme      #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/13 13:34:45 by kgrosjea    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/14 17:09:51 by matheme     ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -26,14 +26,14 @@ static void		max_check_live(t_data *data)
 		data->cycle_to_die -= CYCLE_DELTA;
 		data->nb_check = 0;
 		if (data->verbose & VERBOSE_SHOW_CYCLES)
-			dprintf(1, "Cycle to die is now %d\n", data->cycle_to_die);
+			ft_printf("Cycle to die is now %d\n", data->cycle_to_die);
 	}
 	else if (data->nb_check == MAX_CHECKS)
 	{
 		data->cycle_to_die -= CYCLE_DELTA;
 		data->nb_check = 0;
 		if (data->verbose & VERBOSE_SHOW_CYCLES)
-			dprintf(1, "Cycle to die is now %d\n", data->cycle_to_die);
+			ft_printf("Cycle to die is now %d\n", data->cycle_to_die);
 	}
 }
 
@@ -73,7 +73,7 @@ void			cycle(t_data *data)
 	{
 		cycle_local++;
 		if (data->verbose & VERBOSE_SHOW_CYCLES)
-			dprintf(1, "It is now cycle %ld\n", data->cycle);
+			ft_printf("It is now cycle %ld\n", data->cycle);
 		browse_process(data);
 		if (cycle_local >= data->cycle_to_die)
 			if (cycle_to_die(data, &cycle_local))

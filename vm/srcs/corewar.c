@@ -3,10 +3,10 @@
 /*                                                              /             */
 /*   corewar.c                                        .::    .:/ .      .::   */
 /*                                                 +:+:+   +:    +:  +:+:+    */
-/*   By: kgrosjea <kgrosjea@student.le-101.fr>      +:+   +:    +:    +:+     */
+/*   By: matheme <matheme@student.le-101.fr>        +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/09/26 11:46:08 by matheme      #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/13 13:34:45 by kgrosjea    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/14 17:23:48 by matheme     ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -113,5 +113,7 @@ int			main(int ac, char **av)
 	data.visu ? init_foot_print(&data) : 0;
 	cycle(&data);
 	print_the_winner(data);
+	if (data.visu)
+		quit_sdl();
 	return (0);
 }

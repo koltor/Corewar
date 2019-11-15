@@ -3,10 +3,10 @@
 /*                                                              /             */
 /*   live.c                                           .::    .:/ .      .::   */
 /*                                                 +:+:+   +:    +:  +:+:+    */
-/*   By: kgrosjea <kgrosjea@student.le-101.fr>      +:+   +:    +:    +:+     */
+/*   By: matheme <matheme@student.le-101.fr>        +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/10/07 11:02:43 by matheme      #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/13 15:06:43 by kgrosjea    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/14 17:09:51 by matheme     ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -29,18 +29,18 @@ void		live(t_process *proc, t_data *data, int verbose)
 	int idx;
 
 	get_params(data, proc);
-	proc->param_value[0] = (int)unsigned_int_reverse_octet(proc->param[0]);
+	proc->param_value[0] = proc->param[0];
 	proc->is_alive = 1;
 	data->nb_live += 1;
 	proc->last_live = data->cycle;
 	if (verbose & VERBOSE_SHOW_OPERATIONS)
-		dprintf(1, "P %4d | live %d\n", proc->id, proc->param_value[0]);
+		ft_printf("P %4d | live %d\n", proc->id, proc->param_value[0]);
 	if ((idx = is_there(proc->param_value[0], data->n, data->nb_champ)) != -1)
 	{
 		data->last_player_alive = idx;
 		data->visu ? set_live_visu(idx + 1) : 0;
 		if (verbose & VERBOSE_SHOW_LIVES)
-			dprintf(1, "Player %d (%s) is said to be alive\n", idx + 1,
+			ft_printf("Player %d (%s) is said to be alive\n", idx + 1,
 			data->champs_data[idx].prog_name);
 	}
 }
